@@ -56,6 +56,19 @@ formCadastroCliente = renderBootstrap3 BootstrapBasicForm $ Cliente <$>
 getHomeR :: Handler Html
 getHomeR = defaultLayout [whamlet|Hello World!|]
 
+getErroR :: Handler Html
+getErroR = widgetDefaultLayout $ do
+    toWidgetHead [lucius|
+        h3 {
+            color: red;
+        }
+    |]
+    toWidget [whamlet|
+        <h3> Ocorreu um erro inesperado no sistema
+        
+        <a href=@{HomeR}>Voltar a pagina inicial
+    |]
+
 getTemplateR :: Handler Html
 getTemplateR = do 
     widgetDefaultLayout [whamlet|Hello World|]
@@ -66,5 +79,11 @@ getCadastroClienteR = do
     widgetDefaultLayout $ do
     toWidget $ $(juliusFile "templates/cadastroCliente.julius")
     $(whamletFile "templates/cadastroCliente.hamlet")
-    
-    
+
+
+postCadastroClienteR :: Handler Html
+postCadastroClienteR = do
+           ((result, _), _) <- runFormPost formCadastroCliente
+           case result of 
+               FormSuccess usuario -> (runDB $ insert usuario) >>= \usuarioId -> redirect CadastroClienteR
+               _ -> redirect HomeR

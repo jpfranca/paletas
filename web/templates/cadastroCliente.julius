@@ -14,6 +14,9 @@ $(document).ready(function() {
     $(txtIE).mask('000.000.000.000');
     $(txtIE).attr('pattern', '.{15,15}');
     
+    $(txtTel).mask('00 0000-0000');
+    $(txtTel).attr('pattern', '.{12,12}');
+    
     $(txtSenha).attr('pattern', '.{6,14}');
 });
 
