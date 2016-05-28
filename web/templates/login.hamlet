@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col-xs-12">
+      <h1>Identificação
+      <p>Conecte-se ou crie uma nova conta<br > Por favor, complete os seus dados
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="jumbotron formulario formulario-login">
+        <form method=post action=@{LoginR} enctype=#{enctype}>
+          <div class="row">
+              ^{widget}
+              <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                  <a href="@{CadastroClienteR}">Quero me cadastrar</a>
+                
+                <div class="col-xs-12 col-sm-6">
+                  <button type=submit class="btn btn-lg btn-primary pull-right">Entrar

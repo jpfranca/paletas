@@ -1,10 +1,10 @@
 <h1>Cadastro</h1>
 
   
-<div class="formulario">
+<div class="jumbotron formulario">
   <div class="row">
       <div class="col-xs-12">
-          <a href="#linkToLogin" class="btn btn-info pull-right">Já tenho cadastro
+          <a href="@{LoginR}" class="btn btn-info pull-right">Já tenho cadastro
  
   <div class="row">
       <div class="col-xs-12">

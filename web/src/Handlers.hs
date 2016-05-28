@@ -43,6 +43,7 @@ widgetDefaultLayout widget = defaultLayout $ do
             ^{widget}
     |] 
 
+
 formCadastroCliente :: Form Cliente
 formCadastroCliente = renderBootstrap3 BootstrapBasicForm $ Cliente <$>
                         areq textField (bfs ("Razão social" :: Text)) Nothing <*>
@@ -52,6 +53,12 @@ formCadastroCliente = renderBootstrap3 BootstrapBasicForm $ Cliente <$>
                         areq textField (bfs ("Telefone" :: Text)) Nothing <*>
                         areq textField (bfs ("Email" :: Text)) Nothing <*>
                         areq passwordField (bfs ("Senha" :: Text)) Nothing
+
+formLogin :: Form (Text,Text)
+formLogin = renderBootstrap3 BootstrapBasicForm $ (,) <$>
+                areq textField (bfs ("Email" :: Text)) Nothing <*>
+                areq passwordField (bfs ("Senha" :: Text)) Nothing
+
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout [whamlet|Hello World!|]
@@ -73,13 +80,19 @@ getTemplateR :: Handler Html
 getTemplateR = do 
     widgetDefaultLayout [whamlet|Hello World|]
     
+getLoginR :: Handler Html
+getLoginR = do
+    (widget, enctype) <- generateFormPost formLogin
+    widgetDefaultLayout $ do
+    toWidget $ $(juliusFile "templates/login.julius")
+    $(whamletFile "templates/login.hamlet")
+    
 getCadastroClienteR :: Handler Html
 getCadastroClienteR = do
     (widget, enctype) <- generateFormPost formCadastroCliente
     widgetDefaultLayout $ do
     toWidget $ $(juliusFile "templates/cadastroCliente.julius")
     $(whamletFile "templates/cadastroCliente.hamlet")
-
 
 postCadastroClienteR :: Handler Html
 postCadastroClienteR = do
