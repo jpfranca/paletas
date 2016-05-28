@@ -44,6 +44,16 @@ widgetForm route enctype widget = [whamlet|
     <input .btn .btn-primary .btn-lg .pull-right type="submit" value="Cadastrar">
     |]
 
+formCadastroCliente :: Form Cliente
+formCadastroCliente = renderBootstrap3 BootstrapBasicForm $ Cliente <$>
+                        areq textField (bfs ("Razão social" :: Text)) Nothing <*>
+                        areq textField (bfs ("Nome fantasia" :: Text)) Nothing <*>
+                        areq textField (bfs ("CNPJ" :: Text)) Nothing <*>
+                        areq textField (bfs ("Inscrição Estadual" :: Text)) Nothing <*>
+                        areq textField (bfs ("Telefone" :: Text)) Nothing <*>
+                        areq textField (bfs ("Email" :: Text)) Nothing <*>
+                        areq passwordField (bfs ("Senha" :: Text)) Nothing
+
 getHomeR :: Handler Html
 getHomeR = defaultLayout [whamlet|Hello World!|]
 
