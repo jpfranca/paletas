@@ -27,11 +27,7 @@ Cliente json
     cnpj Text
     inscricaoEstadual Text
     telefone Text
-    deriving Show
-
-Usuario json
     email Text
-    clienteId ClienteId
     senha Text
     deriving Show
 
