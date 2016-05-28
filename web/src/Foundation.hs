@@ -58,6 +58,26 @@ instance YesodPersist WebSite where
        runSqlPool f pool
 
 instance Yesod WebSite where
+    authRoute _ = Just LoginR -- rota default para acesso não autorizado
+    isAuthorized HomeR _ = return Authorized
+    isAuthorized ErroR _ = return Authorized
+    isAuthorized LoginR _ = return Authorized
+    isAuthorized CadastroClienteR _ = return Authorized
+    --isAuthorized AdminR _ = isUserAdmin
+    isAuthorized _ _ = isLogged
+
+isLogged = do
+    sessionUserId <- lookupSession "_ID"
+    return $ case sessionUserId of
+        Nothing -> AuthenticationRequired
+        Just _ -> Authorized
+    
+isUserAdmin = do
+    sessionUserId <- lookupSession "_ID"
+    return $ case sessionUserId of
+        Just "admin" -> Authorized 
+        Just _ -> Unauthorized "Acesso não autorizado"
+        Nothing -> Unauthorized "Acesso não autorizado"
 
 type Form a = Html -> MForm Handler (FormResult a, Widget)
 
