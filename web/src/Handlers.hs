@@ -24,24 +24,29 @@ loadExternalLibrary BootstrapJs = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3
 loadExternalLibrary JQuery = "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"
 loadExternalLibrary JQueryMask = "https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"
 
-widgetDefaultLayout = defaultLayout $ do
+widgetDefaultLayout :: Widget -> HandlerT WebSite IO Html
+widgetDefaultLayout widget = defaultLayout $ do
     setTitle "Paletas Haskell"
     toWidgetHead [hamlet|
-                    <meta name=viewport content="width=device-width, initial-scale=1"> 
-                    <meta charset="utf-8">
-                 |]
+        <meta name=viewport content="width=device-width, initial-scale=1"> 
+        <meta charset="utf-8">
+    |]
     addStylesheetRemote $ loadExternalLibrary Bootstrap
     addStylesheetRemote $ loadExternalLibrary BootstrapTheme
     addScriptRemote $ loadExternalLibrary JQuery
     addScriptRemote $ loadExternalLibrary BootstrapJs
     addScriptRemote $ loadExternalLibrary JQueryMask
     toWidget $(whamletFile "templates/navbarDefault.hamlet")
+    toWidget [whamlet|
+        <div .container> 
+            ^{widget}
+    |] 
 
-widgetForm :: Route WebSite -> Enctype -> Widget -> Widget
-widgetForm route enctype widget = [whamlet|
+widgetForm :: Route WebSite -> Enctype -> Widget -> Text -> Widget
+widgetForm route enctype widget buttonText = [whamlet|
     <form method=post action=@{route} enctype=#{enctype}>
     ^{widget}
-    <input .btn .btn-primary .btn-lg .pull-right type="submit" value="Cadastrar">
+    <input .btn .btn-primary .btn-lg .pull-right type="submit" value=#{buttonText}>
     |]
 
 formCadastroCliente :: Form Cliente
@@ -59,5 +64,10 @@ getHomeR = defaultLayout [whamlet|Hello World!|]
 
 getTemplateR :: Handler Html
 getTemplateR = do 
-    widgetDefaultLayout
+    widgetDefaultLayout [whamlet|Hello World|]
+    
+getCadastroClienteR :: Handler Html
+getCadastroClienteR = do
+    (widget, enctype) <- generateFormPost formCadastroCliente
+    widgetDefaultLayout $ widgetForm CadastroClienteR enctype widget "Continuar"
     

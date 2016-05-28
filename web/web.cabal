@@ -38,8 +38,6 @@ executable         web
                  , persistent-postgresql
                  , monad-logger
                  , shakespeare
-                 
-                 
 
     other-modules: Foundation
                  , Import
