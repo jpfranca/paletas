@@ -13,7 +13,19 @@ executable         web
     extensions: TemplateHaskell
                 QuasiQuotes
                 OverloadedStrings
-                
+                CPP
+                MultiParamTypeClasses
+                TypeFamilies
+                GADTs
+                GeneralizedNewtypeDeriving
+                FlexibleContexts
+                FlexibleInstances
+                EmptyDataDecls
+                NoMonomorphismRestriction
+                DeriveDataTypeable
+                ViewPatterns
+                TupleSections
+                RecordWildCards
 
     build-depends: base                          >= 4          && < 5
                  , yesod                         >= 1.4.1      && < 1.5
@@ -23,4 +35,5 @@ executable         web
                  , text
                  , persistent-postgresql
                  , monad-logger
+                 , shakespeare
                 
