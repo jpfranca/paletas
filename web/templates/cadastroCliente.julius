@@ -1,0 +1,19 @@
+$(document).ready(function() {
+    
+    var txtRazaoSocial = $('form input[type=text]')[0];
+    var txtNomeFansasiaJ = $('form input[type=text]')[1];
+    var txtCNPJ = $('form input[type=text]')[2];
+    var txtIE = $('form input[type=text]')[3];
+    var txtTel = $('form input[type=text]')[4];
+    var txtEmail = $('form input[type=text]')[5];
+    var txtSenha = $('form input[type=text]')[6];
+    
+    $(txtCNPJ).mask('00.000.000/0000-00');
+    $(txtCNPJ).attr('pattern', '.{18,18}');
+    
+    $(txtIE).mask('000.000.000.000');
+    $(txtIE).attr('pattern', '.{15,15}');
+    
+    $(txtSenha).attr('pattern', '.{6,14}');
+});
+

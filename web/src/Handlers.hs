@@ -11,6 +11,7 @@ import Control.Applicative
 import Data.Text
 import Database.Persist.Postgresql
 import Text.Lucius
+import Text.Julius
 import Control.Monad.Logger (runStdoutLoggingT)
 
 mkYesodDispatch "WebSite" pRoutes
@@ -21,7 +22,7 @@ loadExternalLibrary :: ExternalLibraryName -> Text
 loadExternalLibrary Bootstrap = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
 loadExternalLibrary BootstrapTheme = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
 loadExternalLibrary BootstrapJs = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-loadExternalLibrary JQuery = "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"
+loadExternalLibrary JQuery = "https://code.jquery.com/jquery-1.12.4.min.js"
 loadExternalLibrary JQueryMask = "https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"
 
 widgetDefaultLayout :: Widget -> HandlerT WebSite IO Html
@@ -62,6 +63,8 @@ getTemplateR = do
 getCadastroClienteR :: Handler Html
 getCadastroClienteR = do
     (widget, enctype) <- generateFormPost formCadastroCliente
-    widgetDefaultLayout $ $(whamletFile "templates/cadastroCliente.hamlet")
+    widgetDefaultLayout $ do
+    toWidget $ $(juliusFile "templates/cadastroCliente.julius")
+    $(whamletFile "templates/cadastroCliente.hamlet")
     
     
