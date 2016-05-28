@@ -96,7 +96,7 @@ postLoginR :: Handler Html
 postLoginR = do
            ((result, _), _) <- runFormPost formLogin
            case result of 
-               FormSuccess ("admin","admin") -> setSession "_ID" "admin" >> redirect HomeR
+               FormSuccess ("admin","admin") -> setSession "_ID" "admin" >> redirect AdminR
                FormSuccess (email,senha) -> do 
                    user <- runDB $ selectFirst [ClienteEmail ==. email, ClienteSenha ==. senha] []
                    case user of
