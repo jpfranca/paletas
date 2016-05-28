@@ -40,6 +40,15 @@ widgetDefaultLayout widget = defaultLayout $ do
     |]
     addStylesheetRemote $ loadExternalLibrary Bootstrap
     addStylesheetRemote $ loadExternalLibrary BootstrapTheme
+    toWidgetHead [lucius|
+        table thead tr td {
+            font-weight: bold;
+        }
+        
+        table thead tr th {
+            font-weight: bold;
+        }
+    |]
     addScriptRemote $ loadExternalLibrary JQuery
     addScriptRemote $ loadExternalLibrary BootstrapJs
     addScriptRemote $ loadExternalLibrary JQueryMask
@@ -48,7 +57,11 @@ widgetDefaultLayout widget = defaultLayout $ do
         <div .container> 
             ^{widget}
     |] 
-
+    
+formLogin :: Form (Text,Text)
+formLogin = renderBootstrap3 BootstrapBasicForm $ (,) <$>
+                areq emailField (bfs ("Email" :: Text)) Nothing <*>
+                areq passwordField (bfs ("Senha" :: Text)) Nothing
 
 formCadastroCliente :: Form Cliente
 formCadastroCliente = renderBootstrap3 BootstrapBasicForm $ Cliente <$>
@@ -57,13 +70,13 @@ formCadastroCliente = renderBootstrap3 BootstrapBasicForm $ Cliente <$>
                         areq textField (bfs ("CNPJ" :: Text)) Nothing <*>
                         areq textField (bfs ("Inscrição Estadual" :: Text)) Nothing <*>
                         areq textField (bfs ("Telefone" :: Text)) Nothing <*>
-                        areq textField (bfs ("Email" :: Text)) Nothing <*>
+                        areq emailField (bfs ("Email" :: Text)) Nothing <*>
                         areq passwordField (bfs ("Senha" :: Text)) Nothing
 
-formLogin :: Form (Text,Text)
-formLogin = renderBootstrap3 BootstrapBasicForm $ (,) <$>
-                areq textField (bfs ("Email" :: Text)) Nothing <*>
-                areq passwordField (bfs ("Senha" :: Text)) Nothing
+formCadastroProduto :: Form Produto
+formCadastroProduto = renderBootstrap3 BootstrapBasicForm $ Produto <$>
+                        areq textField (bfs ("Nome" :: Text)) Nothing <*>
+                        areq doubleField (bfs ("Valor" :: Text)) Nothing
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout [whamlet|Hello World!|]
@@ -125,3 +138,11 @@ postCadastroClienteR = do
            case result of 
                FormSuccess usuario -> (runDB $ insert usuario) >>= \usuarioId -> redirect CadastroClienteR
                _ -> redirect ErroR
+               
+getProdutoR :: Handler Html
+getProdutoR = do
+    (widget, enctype) <- generateFormPost formCadastroProduto
+    produtos <- runDB $ selectList [] [Asc ProdutoNome]
+    widgetDefaultLayout $ do
+    toWidget $ $(juliusFile "templates/produto.julius")
+    $(whamletFile "templates/produto.hamlet")
