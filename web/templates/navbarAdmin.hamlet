@@ -18,7 +18,7 @@
             <a href="#">
                 <span class="glyphicon glyphicon-shopping-cart">&nbsp;Pedidos
         <li>
-            <a href="#">
+            <a href="@{LogOffR}">
                 <span class="glyphicon glyphicon-log-out">&nbsp;Sair
             
    

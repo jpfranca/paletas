@@ -19,5 +19,5 @@
             <a href="#">
                 <span class="glyphicon glyphicon-user">&nbsp;Perfil
         <li>
-            <a href="#">
+            <a href="@{LogOffR}">
                 <span class="glyphicon glyphicon-log-out">&nbsp;Sair
