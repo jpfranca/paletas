@@ -1,0 +1,18 @@
+<h1>Cadastro</h1>
+
+  
+<div class="formulario">
+  <div class="row">
+      <div class="col-xs-12">
+          <a href="#linkToLogin" class="btn btn-info pull-right">Já tenho cadastro
+ 
+  <div class="row">
+      <div class="col-xs-12">
+            <h3>Dados da Empresa</h3>
+      
+  <form method="post" action=@{CadastroClienteR} enctype=#{enctype}>
+      ^{widget}
+      <div class="row p-x-2" >
+          <div class="col-xs-12">
+              <button type="submit" class="btn btn-primary btn-lg pull-right">Continuar
+          

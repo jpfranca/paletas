@@ -42,13 +42,6 @@ widgetDefaultLayout widget = defaultLayout $ do
             ^{widget}
     |] 
 
-widgetForm :: Route WebSite -> Enctype -> Widget -> Text -> Widget
-widgetForm route enctype widget buttonText = [whamlet|
-    <form method=post action=@{route} enctype=#{enctype}>
-    ^{widget}
-    <input .btn .btn-primary .btn-lg .pull-right type="submit" value=#{buttonText}>
-    |]
-
 formCadastroCliente :: Form Cliente
 formCadastroCliente = renderBootstrap3 BootstrapBasicForm $ Cliente <$>
                         areq textField (bfs ("Razão social" :: Text)) Nothing <*>
@@ -69,5 +62,6 @@ getTemplateR = do
 getCadastroClienteR :: Handler Html
 getCadastroClienteR = do
     (widget, enctype) <- generateFormPost formCadastroCliente
-    widgetDefaultLayout $ widgetForm CadastroClienteR enctype widget "Continuar"
+    widgetDefaultLayout $ $(whamletFile "templates/cadastroCliente.hamlet")
+    
     
