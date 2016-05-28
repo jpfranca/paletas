@@ -146,3 +146,10 @@ getProdutoR = do
     widgetDefaultLayout $ do
     toWidget $ $(juliusFile "templates/produto.julius")
     $(whamletFile "templates/produto.hamlet")
+    
+postProdutoR :: Handler Html
+postProdutoR = do
+    ((result, _), _) <- runFormPost formCadastroProduto
+    case result of 
+        FormSuccess produto -> (runDB $ insert produto) >> redirect ProdutoR
+        _ -> redirect ErroR

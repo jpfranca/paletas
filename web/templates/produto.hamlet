@@ -1,9 +1,11 @@
  
   <h1>Produtos</h1>
-  <div class="formulario formulario-cadastro jumbotron">
+  <div class="formulario formulario-cadastro">
+      <div class="row">
+          
       <div class="row">
         <div class="col-xs-8 col-xs-offset-2">
-          <table class="table table-hover">
+          <table class="table table-hover table-striped">
             <thead>
               <tr>
                 <td style="width:50%;">Nome
@@ -20,7 +22,7 @@
             $if Prelude.null produtos
                 <tfoot>
                     <tr>
-                        <td colspan="3">Não há produtos cadastrados
+                        <td colspan="3" style="text-align:center">Não há produtos cadastrados
               
                     
       <div class="row p-x-2" >
