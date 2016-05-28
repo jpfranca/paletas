@@ -103,10 +103,10 @@ postLoginR = do
                        Nothing -> redirect LoginR
                        Just (Entity pid u) -> setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect CadastroClienteR
 
---getLogOffR :: Handler Html
---getLogOffR = do
---    deleteSession "_ID"
---    redirect LoginR
+getLogOffR :: Handler Html
+getLogOffR = do
+    deleteSession "_ID"
+    redirect LoginR
 
 getAdminR :: Handler Html
 getAdminR = do
