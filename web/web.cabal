@@ -4,9 +4,9 @@ cabal-version:     >= 1.8
 build-type:        Simple
 
 executable         web
-    hs-source-dirs: .
+    hs-source-dirs: src
 
-    main-is:           main.hs
+    main-is:           ../main.hs
 
     ghc-options:       -threaded -O2 -rtsopts -with-rtsopts=-N
 
@@ -29,11 +29,19 @@ executable         web
 
     build-depends: base                          >= 4          && < 5
                  , yesod                         >= 1.4.1      && < 1.5
+                 , yesod-auth                    >= 1.4.0      && < 1.5
                  , yesod-static                  >= 1.4.0.3    && < 1.6
                  , yesod-form                    >= 1.4.0      && < 1.5
+                 , bytestring                    >= 0.9        && < 0.11
                  , persistent                    >= 2.0        && < 2.3
                  , text
                  , persistent-postgresql
                  , monad-logger
                  , shakespeare
+                 
+                 
+
+    other-modules: Foundation
+                 , Import
+                 , Handlers                
                 
