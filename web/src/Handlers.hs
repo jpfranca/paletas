@@ -87,6 +87,17 @@ getLoginR = do
     toWidget $ $(juliusFile "templates/login.julius")
     $(whamletFile "templates/login.hamlet")
     
+postLoginR :: Handler Html
+postLoginR = do
+           ((result, _), _) <- runFormPost formLogin
+           case result of 
+               FormSuccess ("admin","admin") -> setSession "_ID" "admin" >> redirect HomeR
+               FormSuccess (email,senha) -> do 
+                   user <- runDB $ selectFirst [ClienteEmail ==. email, ClienteSenha ==. senha] []
+                   case user of
+                       Nothing -> redirect LoginR
+                       Just (Entity pid u) -> setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect CadastroClienteR
+    
 getCadastroClienteR :: Handler Html
 getCadastroClienteR = do
     (widget, enctype) <- generateFormPost formCadastroCliente
