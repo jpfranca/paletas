@@ -86,4 +86,4 @@ postCadastroClienteR = do
            ((result, _), _) <- runFormPost formCadastroCliente
            case result of 
                FormSuccess usuario -> (runDB $ insert usuario) >>= \usuarioId -> redirect CadastroClienteR
-               _ -> redirect HomeR
+               _ -> redirect ErroR
