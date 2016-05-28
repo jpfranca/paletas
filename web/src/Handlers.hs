@@ -25,8 +25,14 @@ loadExternalLibrary BootstrapJs = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3
 loadExternalLibrary JQuery = "https://code.jquery.com/jquery-1.12.4.min.js"
 loadExternalLibrary JQueryMask = "https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"
 
+getNavBar :: Maybe Text -> Widget
+getNavBar (Just "admin") = $(whamletFile "templates/navbarAdmin.hamlet")
+getNavBar (Just _) = $(whamletFile "templates/navbarUser.hamlet")
+getNavBar Nothing = $(whamletFile "templates/navbarDefault.hamlet")
+
 widgetDefaultLayout :: Widget -> HandlerT WebSite IO Html
 widgetDefaultLayout widget = defaultLayout $ do
+    sessionUserId <- lookupSession "_ID"
     setTitle "Paletas Haskell"
     toWidgetHead [hamlet|
         <meta name=viewport content="width=device-width, initial-scale=1"> 
@@ -37,7 +43,7 @@ widgetDefaultLayout widget = defaultLayout $ do
     addScriptRemote $ loadExternalLibrary JQuery
     addScriptRemote $ loadExternalLibrary BootstrapJs
     addScriptRemote $ loadExternalLibrary JQueryMask
-    toWidget $(whamletFile "templates/navbarDefault.hamlet")
+    getNavBar sessionUserId
     toWidget [whamlet|
         <div .container> 
             ^{widget}
@@ -58,7 +64,6 @@ formLogin :: Form (Text,Text)
 formLogin = renderBootstrap3 BootstrapBasicForm $ (,) <$>
                 areq textField (bfs ("Email" :: Text)) Nothing <*>
                 areq passwordField (bfs ("Senha" :: Text)) Nothing
-
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout [whamlet|Hello World!|]
@@ -97,7 +102,16 @@ postLoginR = do
                    case user of
                        Nothing -> redirect LoginR
                        Just (Entity pid u) -> setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect CadastroClienteR
-    
+
+--getLogOffR :: Handler Html
+--getLogOffR = do
+--    deleteSession "_ID"
+--    redirect LoginR
+
+getAdminR :: Handler Html
+getAdminR = do
+    widgetDefaultLayout $(whamletFile "templates/admin.hamlet")
+
 getCadastroClienteR :: Handler Html
 getCadastroClienteR = do
     (widget, enctype) <- generateFormPost formCadastroCliente

@@ -8,6 +8,8 @@ pRoutes = [parseRoutes|
 / HomeR GET
 /template TemplateR GET
 /login LoginR GET POST
+/logoff LogOffR GET
+/admin AdminR GET
 /cadastrocliente CadastroClienteR GET POST
 /erro ErroR GET 
 /static StaticR Static getStatic
