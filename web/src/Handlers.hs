@@ -72,6 +72,14 @@ formCadastroCliente = renderBootstrap3 BootstrapBasicForm $ Cliente <$>
                         areq textField (bfs ("Telefone" :: Text)) Nothing <*>
                         areq emailField (bfs ("Email" :: Text)) Nothing <*>
                         areq passwordField (bfs ("Senha" :: Text)) Nothing
+                        
+formAlteraCliente :: Cliente -> Form (Text, Text, Text, Text)
+formAlteraCliente cliente = renderBootstrap3 BootstrapBasicForm $ (,,,) <$>
+                        areq textField (bfs ("Razão social" :: Text)) (Just (clienteRazaoSocial cliente)) <*>
+                        areq textField (bfs ("Nome fantasia" :: Text)) (Just (clienteNomeFantasia cliente)) <*>
+                        areq textField (bfs ("Telefone" :: Text)) (Just (clienteTelefone cliente)) <*>
+                        areq emailField (bfs ("Email" :: Text)) (Just (clienteEmail cliente))
+
 
 formCadastroProduto :: Form Produto
 formCadastroProduto = renderBootstrap3 BootstrapBasicForm $ Produto <$>
@@ -111,10 +119,14 @@ postLoginR = do
            case result of 
                FormSuccess ("admin@paletas.com","admin") -> setSession "_ID" "admin" >> redirect AdminR
                FormSuccess (email,senha) -> do 
-                   user <- runDB $ selectFirst [ClienteEmail ==. email, ClienteSenha ==. senha] []
-                   case user of
-                       Nothing -> redirect LoginR
-                       Just (Entity pid u) -> setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect CadastroClienteR
+                   clienteEntity <- runDB $ selectFirst [ClienteEmail ==. email, ClienteSenha ==. senha] []
+                   case clienteEntity of
+                        Nothing -> redirect LoginR
+                        Just (Entity clienteId cliente) -> do 
+                            setSession "_ID" (pack $ show $ fromSqlKey clienteId) 
+                            setSession "_EMAIL" (clienteEmail cliente)
+                            setSession "_SENHA" (clienteSenha cliente) 
+                            >> redirect CadastroClienteR
 
 getLogOffR :: Handler Html
 getLogOffR = do
@@ -170,3 +182,30 @@ getClienteIdR :: ClienteId -> Handler ()
 getClienteIdR clienteId = do
     cliente <- runDB $ get404 clienteId
     sendResponse $ toJSON cliente
+
+getPerfilR :: Handler Html
+getPerfilR  = do
+    sessionUserId <- lookupSession "_ID"
+    getPerfilPage sessionUserId
+
+getPerfilPage :: Maybe Text -> Handler Html
+getPerfilPage Nothing = redirect LoginR
+getPerfilPage (Just "admin") = redirect AdminR
+getPerfilPage (Just _) = do
+    maybeEmail <- lookupSession "_EMAIL"
+    maybeSenha <- lookupSession "_SENHA"
+    paginaPerfil maybeEmail maybeSenha
+
+paginaPerfil :: Maybe Text -> Maybe Text -> Handler Html
+paginaPerfil (Nothing) (Nothing) = redirect ErroR
+paginaPerfil (Just email) (Just senha) = do
+    clienteEntity <- runDB $ selectFirst [ClienteEmail ==. email, ClienteSenha ==. senha] []
+    case clienteEntity of
+        Nothing -> redirect ErroR
+        Just (Entity clienteId cliente) -> widgetDefaultLayout $ do
+            toWidget $ $(juliusFile "templates/perfil.julius")
+            $(whamletFile "templates/perfil.hamlet")
+    
+    
+        
+        

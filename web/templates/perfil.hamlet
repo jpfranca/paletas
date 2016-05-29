@@ -1,0 +1,47 @@
+
+    <div class="formulario formulario-cadastro modal-body" id="frmCadastro">
+      <div class="row">
+          <div class="col-xs-12">
+              <h3>Dados da Empresa
+              
+      <div class="row">
+          <div class="col-xs-6 form-item">
+              <div class="form-group">
+                  <label for="razao_social">Razão Social 
+                  <p class="form-control-static" id="lblRazaoSocial">#{clienteRazaoSocial cliente}
+          
+          <div class="col-xs-6 form-item">
+              <div class="form-group">
+                  <label for="nome_fantasia">Nome Fantasia
+                  <p class="form-control-static" id="lblNomeFantasia">#{clienteNomeFantasia cliente}
+      
+      <div class="row">
+          <div class="col-xs-6 form-item">
+              <div class="form-group">
+                  <label for="cnpj">CNPJ
+                  <p class="form-control-static" id="lblCNPJ">#{clienteCnpj cliente}
+          
+          <div class="col-xs-6 form-item">
+              <div class="form-group">
+                  <label for="inscricao_estadual">Inscrição Estadual
+                  <p class="form-control-static" id="lblIE">#{clienteInscricaoEstadual cliente}
+      
+      <div class="row">
+          <div class="col-xs-6 form-item">
+              <div class="form-group">
+                  <label for="telefone">Telefone
+                  <p class="form-control-static" id="lblTelefone">#{clienteTelefone cliente}
+      
+      <div clas="row">
+          <div class="col-xs-12">
+              <h3>Dados de acesso
+      
+      <div class="row">
+          <div class="col-xs-12 form-item">
+              <div class="form-group">
+                  <label for="email">E-mail
+                  <p class="form-control-static" id="lblEmail">#{clienteEmail cliente}
+      
+      <div class="row p-x-2" >
+          <div class="col-xs-12">
+              <button type="submit" class="btn btn-primary btn-lg pull-right">Alterar Dados
