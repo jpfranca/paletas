@@ -63,7 +63,11 @@ instance Yesod WebSite where
     isAuthorized ErroR _ = return Authorized
     isAuthorized LoginR _ = return Authorized
     isAuthorized CadastroClienteR _ = return Authorized
-    --isAuthorized AdminR _ = isUserAdmin
+    isAuthorized AdminR _ = isUserAdmin
+    isAuthorized ClienteR _ = isUserAdmin
+    isAuthorized (ClienteIdR _) _ = isUserAdmin
+    isAuthorized ProdutoR _= isUserAdmin
+    isAuthorized (ProdutoIdR _) _ = isUserAdmin
     isAuthorized _ _ = isLogged
 
 isLogged = do
