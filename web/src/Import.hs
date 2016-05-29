@@ -14,6 +14,7 @@ pRoutes = [parseRoutes|
 /produto ProdutoR GET POST
 /produto/#ProdutoId ProdutoIdR POST
 /cliente ClienteR GET
+/cliente/#ClienteId ClienteIdR GET
 /erro ErroR GET 
 /static StaticR Static getStatic
 |]

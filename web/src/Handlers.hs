@@ -165,3 +165,8 @@ getClienteR = do
     widgetDefaultLayout $ do
     toWidget $ $(juliusFile "templates/cliente.julius")
     $(whamletFile "templates/cliente.hamlet")
+    
+getClienteIdR :: ClienteId -> Handler ()
+getClienteIdR clienteId = do
+    cliente <- runDB $ get404 clienteId
+    sendResponse $ toJSON cliente
