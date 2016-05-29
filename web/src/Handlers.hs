@@ -109,7 +109,7 @@ postLoginR :: Handler Html
 postLoginR = do
            ((result, _), _) <- runFormPost formLogin
            case result of 
-               FormSuccess ("admin","admin") -> setSession "_ID" "admin" >> redirect AdminR
+               FormSuccess ("admin@paletas.com","admin") -> setSession "_ID" "admin" >> redirect AdminR
                FormSuccess (email,senha) -> do 
                    user <- runDB $ selectFirst [ClienteEmail ==. email, ClienteSenha ==. senha] []
                    case user of
@@ -158,3 +158,10 @@ postProdutoIdR :: ProdutoId -> Handler Html
 postProdutoIdR produtoId = do
      runDB $ delete produtoId
      redirect ProdutoR
+     
+getClienteR :: Handler Html
+getClienteR = do
+    clientes <- runDB $ selectList [] [Asc ClienteNomeFantasia]
+    widgetDefaultLayout $ do
+    toWidget $ $(juliusFile "templates/cliente.julius")
+    $(whamletFile "templates/cliente.hamlet")

@@ -13,6 +13,7 @@ pRoutes = [parseRoutes|
 /cadastrocliente CadastroClienteR GET POST
 /produto ProdutoR GET POST
 /produto/#ProdutoId ProdutoIdR POST
+/cliente ClienteR GET
 /erro ErroR GET 
 /static StaticR Static getStatic
 |]
