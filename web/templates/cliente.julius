@@ -1,18 +1,21 @@
-var rota = @{ProdutoIdR};
-
 $(document).ready(function() {
    $('.lnkDetalhe').click(function() {
-      var clientId = $(this).attr('data-key');
+      var rotaCliente = $(this).attr('data-key');
       
       $.ajax({
-          url: rota + clientId,
+          url: rotaCliente,
           success: function (data) {
-              console.log(data);
-          }
+              $('#lblRazaoSocial').html(data.razaoSocial);
+              $('#lblNomeFantasia').html(data.nomeFantasia);
+              $('#lblCNPJ').html(data.cnpj);
+              $('#lblIE').html(data.inscricaoEstadual);
+              $('#lblTelefone').html(data.telefone);
+              $('#lblEmail').html(data.email);
+              
+              $('#modalDetalhe').modal('show');
+          },
           error: function (jqXHR, textStatus, errorThrown) {
-              console.log(jqXHR);
-              console.log(textStatus);
-              console.log(errorThrown);
+              
           }
       });
    });
