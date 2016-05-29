@@ -1,3 +1,12 @@
 $(document).ready(function() {
-    
+
+    $('.lnkExcluir').click(function () {
+       var action = $(this).attr('data-key');
+       var productName = $(this).parent().parent().children().first().text();
+       
+       $('#productName').html(productName);
+       $('#frmExcluir').attr('action', action);
+       
+       $('#modalExcluir').modal('show');
+    });
 });

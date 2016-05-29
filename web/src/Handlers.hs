@@ -153,3 +153,8 @@ postProdutoR = do
     case result of 
         FormSuccess produto -> (runDB $ insert produto) >> redirect ProdutoR
         _ -> redirect ErroR
+        
+postProdutoIdR :: ProdutoId -> Handler Html
+postProdutoIdR produtoId = do
+     runDB $ delete produtoId
+     redirect ProdutoR
