@@ -1,0 +1,19 @@
+var rota = @{ProdutoIdR};
+
+$(document).ready(function() {
+   $('.lnkDetalhe').click(function() {
+      var clientId = $(this).attr('data-key');
+      
+      $.ajax({
+          url: rota + clientId,
+          success: function (data) {
+              console.log(data);
+          }
+          error: function (jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR);
+              console.log(textStatus);
+              console.log(errorThrown);
+          }
+      });
+   });
+});
