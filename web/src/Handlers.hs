@@ -82,8 +82,8 @@ formAlteraCliente cliente = renderBootstrap3 BootstrapBasicForm $ (,,,) <$>
 
 formAlteraSenha :: Form (Text, Text)
 formAlteraSenha = renderBootstrap3 BootstrapBasicForm $ (,) <$>
-                    areq textField (bfs ("Senha atual" :: Text)) Nothing <*>
-                    areq textField (bfs ("Nova senha" :: Text)) Nothing
+                    areq passwordField (bfs ("Senha atual" :: Text)) Nothing <*>
+                    areq passwordField (bfs ("Nova senha" :: Text)) Nothing
 
 formCadastroProduto :: Form Produto
 formCadastroProduto = renderBootstrap3 BootstrapBasicForm $ Produto <$>
@@ -227,3 +227,18 @@ postPerfilAlteraDadosR clienteId = do
             setSession "_EMAIL" email
             redirect PerfilR
         _ -> redirect ErroR
+        
+postPerfilAlteraSenha :: ClienteId -> Handler Html
+postPerfilAlteraSenha clienteId = do
+    ((result, _), _) <- runFormPost formAlteraSenha
+    case result of
+        FormSuccess (senhaAtual, novaSenha) -> do
+            clienteEntity <- runDB $ selectFirst [ClienteId ==. clienteId, ClienteSenha ==. senhaAtual] []
+            case clienteEntity of
+                Nothing -> redirect ErroR
+                Just (Entity cliId cliente) -> do
+                    runDB $ update cliId [ClienteSenha =. novaSenha]
+                    setSession "_SENHA" novaSenha
+                    redirect PerfilR
+        _ -> redirect ErroR
+    
