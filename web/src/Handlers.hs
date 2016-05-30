@@ -242,3 +242,8 @@ postPerfilAlteraSenha clienteId = do
                     redirect PerfilR
         _ -> redirect ErroR
     
+postPedidoR :: Handler ()
+postPedidoR = do
+    pedido <- requireJsonBody :: Handler Pedido
+    pedidoId <- runDB $ insert pedido
+    sendResponse (object [pack "resp" .= pack (show $ fromSqlKey pedidoId)])
