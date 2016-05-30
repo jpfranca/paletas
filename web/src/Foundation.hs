@@ -59,29 +59,45 @@ instance YesodPersist WebSite where
 
 instance Yesod WebSite where
     authRoute _ = Just LoginR -- rota default para acesso não autorizado
-    isAuthorized HomeR _ = return Authorized
-    isAuthorized ErroR _ = return Authorized
-    isAuthorized LoginR _ = return Authorized
-    isAuthorized CadastroClienteR _ = return Authorized
-    isAuthorized AdminR _ = isUserAdmin
-    isAuthorized ClienteR _ = isUserAdmin
-    isAuthorized (ClienteIdR _) _ = isUserAdmin
-    isAuthorized ProdutoR _= isUserAdmin
-    isAuthorized (ProdutoIdR _) _ = isUserAdmin
-    isAuthorized _ _ = isLogged
+    isAuthorized LogOffR _ = isLogged
+    isAuthorized CadastroClienteR _ = onlyLoggoff
+    isAuthorized AdminR _ = onlyAdmin
+    isAuthorized ProdutoR _ = onlyAdmin
+    isAuthorized (ProdutoIdR _) _ = onlyAdmin
+    isAuthorized ClienteR _ = onlyAdmin
+    isAuthorized (ClienteIdR _) _ = onlyAdmin
+    isAuthorized PerfilR _ = onlyClienteUser
+    isAuthorized (PerfilAlteraDadosR _) _ = onlyClienteUser
+    isAuthorized (PerfilAlteraSenha _) _ = onlyClienteUser
+    isAuthorized PedidoR _ = onlyClienteUser
+    isAuthorized PedidoProdutoR _ = onlyClienteUser
+    isAuthorized PedidoSolicitacaoR _ = onlyClienteUser
+    isAuthorized _ _ = return Authorized
 
 isLogged = do
     sessionUserId <- lookupSession "_ID"
     return $ case sessionUserId of
-        Nothing -> AuthenticationRequired
         Just _ -> Authorized
-    
-isUserAdmin = do
+        _ -> AuthenticationRequired
+        
+onlyLoggoff = do
     sessionUserId <- lookupSession "_ID"
     return $ case sessionUserId of
-        Just "admin" -> Authorized 
-        Just _ -> Unauthorized "Acesso não autorizado"
-        Nothing -> Unauthorized "Acesso não autorizado"
+        Just _ -> Unauthorized "Usuários do sistema não tem permissao para visualizar estas informações"
+        _ -> Authorized
+
+onlyAdmin = do 
+    sessionUserId <- lookupSession "_ID"
+    return $ case sessionUserId of
+        Just "admin" -> Authorized
+        _ -> AuthenticationRequired
+
+onlyClienteUser = do
+    sessionUserId <- lookupSession "_ID"
+    return $ case sessionUserId of
+        Just "admin" -> Unauthorized "Usuarios administrativos não tem permissão para visualizar essas informações"
+        Just _ -> Authorized
+        Nothing -> AuthenticationRequired
 
 type Form a = Html -> MForm Handler (FormResult a, Widget)
 

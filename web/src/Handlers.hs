@@ -91,7 +91,7 @@ formCadastroProduto = renderBootstrap3 BootstrapBasicForm $ Produto <$>
                         areq doubleField (bfs ("Valor" :: Text)) Nothing
 
 getHomeR :: Handler Html
-getHomeR = defaultLayout [whamlet|Hello World!|]
+getHomeR = widgetDefaultLayout [whamlet|Hello World!|]
 
 getErroR :: Handler Html
 getErroR = widgetDefaultLayout $ do
@@ -106,10 +106,6 @@ getErroR = widgetDefaultLayout $ do
         <a href=@{HomeR}>Voltar a pagina inicial
     |]
 
-getTemplateR :: Handler Html
-getTemplateR = do 
-    widgetDefaultLayout [whamlet|Hello World|]
-    
 getLoginR :: Handler Html
 getLoginR = do
     (widget, enctype) <- generateFormPost formLogin

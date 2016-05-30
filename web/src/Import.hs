@@ -6,7 +6,6 @@ import Yesod
 
 pRoutes = [parseRoutes|
 / HomeR GET
-/template TemplateR GET
 /login LoginR GET POST
 /logoff LogOffR GET
 /admin AdminR GET
