@@ -253,3 +253,14 @@ postPedidoProdutoR = do
     pedidoProduto <- requireJsonBody :: Handler PedidoProduto
     pedidoProdutoId <- runDB $ insert pedidoProduto
     sendResponse (object [pack "data" .= pack (show $ fromSqlKey pedidoProdutoId)])
+    
+getPedidoSolicitacaoR :: Handler Html
+getPedidoSolicitacaoR = do
+    sessionUserId <- lookupSession "_ID"
+    case sessionUserId of
+        Nothing -> redirect ErroR
+        (Just clienteIdText) -> do
+            produtoList <- runDB $ selectList [] [Asc ProdutoNome]
+            widgetDefaultLayout $ do
+            toWidget $ $(juliusFile "templates/pedidoCliente.julius")
+            $(whamletFile "templates/pedidoCliente.hamlet")
