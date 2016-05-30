@@ -13,7 +13,7 @@
               <span class="glyphicon glyphicon-shopping-cart">&nbsp;Meus&nbsp;pedidos&nbsp;<span class="caret">
           <ul class="dropdown-menu">
             <li>
-                <a href="#">Novo
+                <a href="@{PedidoSolicitacaoR}">Novo
             <li>
                 <a href="#">Histórico
         <li>

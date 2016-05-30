@@ -1,0 +1,123 @@
+/* global $*/
+var pedidoProdutoArray;
+
+$(document).ready(function() {
+    
+    $('#btnEncomendar').click(function () {
+       
+       pedidoProdutoArray = [];
+       var temProduto = false;
+       
+       $('#tblProdutoEncomenda tbody tr td input[name=txtQuantidade]').each(function() {
+           var qtdItem = $(this).val();
+           
+           if (isNaN(qtdItem) == false && qtdItem > 0) {
+               temProduto = true;
+           }
+       });
+       
+       if (temProduto) {
+           
+           var innerHtml = '';
+           var totalQuantidae = 0;
+           
+           $('#tblProdutoEncomenda tbody tr').each(function() {
+               var idProduto = $(this).children('input[name=txtId]').val();
+               var nomeProduto = $(this).children('input[name=txtNome]').val();
+               var valorProduto = $(this).children('input[name=txtValor]').val();
+               var quantidade = $(this).children('td').children('input[name=txtQuantidade]').val();
+               
+               
+               if (isNaN(quantidade) == false && quantidade > 0) {
+                   
+                   var jsonItem = {
+                       'produtoId': idProduto,
+                       'quantidade': quantidade,
+                       'valorTotal': quantidade * valorProduto
+                   };
+                   
+                   pedidoProdutoArray.push(jsonItem);
+                   
+                   var htmlItem = '<tr><td>' + nomeProduto + '</td><td>R$ <span data-mask="###0,00" data-mask-reverse="true">'+ valorProduto + '</span></td><td>' + quantidade + '</td><td> R$ <span data-mask="###0,00" data-mask-reverse="true">' + FormatDecimal((valorProduto * quantidade), 2) + '</span></td></tr>';
+                   
+                   innerHtml = innerHtml + htmlItem;
+                   
+                   totalQuantidae = totalQuantidae + quantidade;
+               }
+           });
+           
+           console.log(pedidoProdutoArray);
+           
+           $('table tbody[name=tbdDadosPedido]').html('');
+           $('table tbody[name=tbdDadosPedido]').append(innerHtml);
+           
+           $('#modalPedido').modal({
+               show: true,
+               backdrop: 'static'
+           });
+           
+       } else {
+           $('#modalSemProduto').modal('show');
+       }
+       
+       $('tbody[name=tbdDadosPedido]').html(innerHtml);
+    });
+    
+    $('input[name=txtQuantidade]').change(function (argument) {
+       
+       var quantidade = $(this).val();
+       var valor = $(this).parent().parent().children('input[name=txtValor]').val();
+       
+       if (isNaN(quantidade)) {
+           quantidade = 0;
+       }
+       
+       $(this).parent().parent().children('td[name=colValorTotal]').children('span').html(FormatDecimal((quantidade * valor), 2));
+       
+       CalcularTotaisNota();
+    });
+});
+
+var CalcularTotaisNota = function () {
+    
+    var valortotal = 0;
+    var qtdTotal = 0;
+    
+    $('input[name=txtQuantidade]').each(function() {
+        
+        var qtdItem = $(this).val();
+        var valor = $(this).parent().parent().children('input[name=txtValor]').val();
+        
+        if (isNaN(qtdItem) == false && qtdItem > 0) {
+            qtdTotal = parseInt(qtdTotal) + parseInt(qtdItem);
+            // calcula valor total
+            valortotal = valortotal + (qtdItem * valor);    
+        }
+    });
+    
+    // calcula prazo entrega
+    
+    var prazoEncomenda = Math.round(qtdTotal / 100);
+    
+    if ((parseInt(qtdTotal) % 100) > 0) {
+        prazoEncomenda = prazoEncomenda + 1; 
+    }
+    
+    $('span[name=lblValorTotal]').html(FormatDecimal(valortotal, 2));
+    $('span[name=lblDias]').html(prazoEncomenda);
+}
+
+function FormatDecimal(value, decimals) {
+    var number = Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+    var qtdCasas = number.toString().split('.')[1];
+    
+    if (qtdCasas == null || qtdCasas == undefined || qtdCasas.length == 0) {
+        return number + '.00'
+    }
+    
+    if (qtdCasas.length == 1) {
+        return number + '0'
+    }
+    
+    return number;
+}

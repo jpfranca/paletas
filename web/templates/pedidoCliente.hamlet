@@ -1,0 +1,101 @@
+  <div class="row">
+    <div class="col-xs-12">
+      <h3>Faça o seu pedido
+      <p>Encomende conosco as melhores paletas do Brasil
+  <div class="formulario formulario-cadastro">
+      
+          
+      <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
+          <small>Cada centena de produdos demora um (1) dia util para ser produzido</small>
+          <table id="tblProdutoEncomenda" class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <td style="width:55%;">Produto
+                <td style="width:15%;">Valor Unitário
+                <td style="width:15%; text-align:center;">Quantidade
+                <td style="width:15%; text-align:center;">Valor Total
+            <tbody>
+              $forall Entity produtoId produto <- produtoList
+                  <tr>
+                    <input type="hidden" name="txtId" value="#{(show $ fromSqlKey produtoId)}">
+                    <input type="hidden" name="txtNome" value="#{produtoNome produto}">
+                    <input type="hidden" name="txtValor" value="#{produtoValor produto}">
+                    <td>#{produtoNome produto}
+                    <td >R$ <span data-mask="###0,00" data-mask-reverse="true">R$ #{produtoValor produto}
+                    <td style="text-align:center;"><input type="number" name="txtQuantidade" min="0" data-mask="00000" style="max-width:100px;" value="0">
+                    <td name="colValorTotal">R$ <span data-mask="########0,00" data-mask-reverse="true">0,00
+            $if Prelude.null produtoList
+                <tfoot>
+                    <tr>
+                        <td colspan="3" style="text-align:center">Não há produtos cadastrados
+      <div class="row">
+        <div class="col-xs-2 col-xs-offset-2">
+          <label>Prazo
+        <div class="col-xs-8">
+          <span name="lblDias">0
+          <span>dias
+      
+      <div class="row">
+        <div class="col-xs-2 col-xs-offset-2">
+          <label>Valor total
+        <div class="col-xs-8">
+          R$ <span name="lblValorTotal" data-mask="########0,00" data-mask-reverse="true">0,00        
+                    
+      <div class="row p-x-2" >
+        <div class="col-xs-8 col-md-offset-2">
+            <button type="button" class="btn btn-primary pull-right" id="btnEncomendar">Encomendar
+  
+  <div id="modalPedido" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;
+          <h4 class="modal-title">Encomenda
+        <div class="formulario formulario-cadastro modal-body" id="frmCadastro">
+            <input type="hidden" value="#{clienteIdText}">
+            <div class="row">
+              <div class="col-xs-12">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <td style="width:55%;">Produto
+                            <td style="width:15%;">Valor Unitário
+                            <td style="width:15%; text-align:center;">Quantidade
+                            <td style="width:15%; text-align:center;">Valor Total
+                    <tbody name="tbdDadosPedido">
+                      
+            <div class="row">
+              <div class="col-xs-3">
+                <label>Prazo
+              <div class="col-xs-9">
+                <span name="lblDias">0
+                <span>dias
+            
+            <div class="row">
+              <div class="col-xs-3">
+                <label>Valor total
+              <div class="col-xs-9">
+                R$ <span name="lblValorTotal">
+              
+            <div class="row p-x-2" >
+              <div class="col-xs-12">
+                  <button type=button id="btnConfirmar" class="btn btn-success pull-right">Confirmar
+                  <span class="pull-right">&nbsp;
+                  <button type=button class="btn btn-danger pull-right" style="padding-right: 10px;" data-dismiss="modal" aria-label="Close">Cancelar
+                  
+  <div id="modalSemProduto" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;
+          <h4 class="modal-title text-danger">Aviso
+        <div class="formulario formulario-cadastro modal-body" id="frmCadastro">
+            <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                Não foi encomendado nenhum produto
+            
+            <div class="row p-x-2" >
+                <div class="col-xs-12">
+                  <button type=button class="btn btn-danger pull-right" data-dismiss="modal" aria-label="Close">Fechar
+            
+                
