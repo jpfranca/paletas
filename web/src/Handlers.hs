@@ -247,3 +247,9 @@ postPedidoR = do
     pedido <- requireJsonBody :: Handler Pedido
     pedidoId <- runDB $ insert pedido
     sendResponse (object [pack "resp" .= pack (show $ fromSqlKey pedidoId)])
+    
+postPedidoProdutoR :: Handler ()
+postPedidoProdutoR = do
+    pedidoProduto <- requireJsonBody :: Handler PedidoProduto
+    pedidoProdutoId <- runDB $ insert pedidoProduto
+    sendResponse (object [pack "data" .= pack (show $ fromSqlKey pedidoProdutoId)])
