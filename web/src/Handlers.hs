@@ -260,3 +260,16 @@ getPedidoSolicitacaoR = do
             widgetDefaultLayout $ do
             toWidget $ $(juliusFile "templates/pedidoCliente.julius")
             $(whamletFile "templates/pedidoCliente.hamlet")
+            
+
+getListaPedidoR :: Handler ()
+getListaPedidoR = do
+    --addHeader "Access-Control-Allow-Origin" "*"
+    pedidoHandler <- runDB $ (rawSql (pack $ "SELECT ??, ??, ?? FROM pedido INNER JOIN cliente ON pedido.clienteid = cliente.id INNER JOIN pedidoproduto ON pedido.id = pedidoproduto.pedidoid") []) :: Handler [(Entity Pedido,Entity Cliente,Entity PedidoProduto)]
+    sendResponse (object [pack "data" .= fmap (toJSON . (\(p,_,_) -> p)) pedidoHandler])
+        
+getListaPedidoIdR :: ClienteId -> Handler ()
+getListaPedidoIdR clienteId = do
+    --addHeader "Access-Control-Allow-Origin" "*"
+    pedidoHandler <- runDB $ (rawSql (pack $ "SELECT ??, ??, ?? FROM pedido INNER JOIN cliente ON pedido.clienteid = cliente.id INNER JOIN pedidoproduto ON pedido.id = pedidoproduto.pedidoid WHERE pedido.clienteid = " ++ (show $ fromSqlKey clienteId)) []) :: Handler [(Entity Pedido,Entity Cliente,Entity PedidoProduto)]
+    sendResponse (object [pack "data" .= fmap (toJSON . (\(p,_,_) -> p)) pedidoHandler])
