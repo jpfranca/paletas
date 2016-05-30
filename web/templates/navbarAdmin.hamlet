@@ -9,10 +9,13 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
         <li>
-            <a href="#">
+            <a href="@{AdminR}">
+                <span class=" glyphicon glyphicon-cog">&nbsp;Painel de Controle
+        <li>
+            <a href="@{ClienteR}">
                 <span class="glyphicon glyphicon-user">&nbsp;Clientes
         <li>
-            <a href="#">
+            <a href="@{ProdutoR}">
                 <span class="glyphicon glyphicon-ice-lolly-tasted">&nbsp;Produtos
         <li>
             <a href="#">
