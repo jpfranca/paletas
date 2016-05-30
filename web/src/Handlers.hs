@@ -80,6 +80,10 @@ formAlteraCliente cliente = renderBootstrap3 BootstrapBasicForm $ (,,,) <$>
                         areq textField (bfs ("Telefone" :: Text)) (Just (clienteTelefone cliente)) <*>
                         areq emailField (bfs ("Email" :: Text)) (Just (clienteEmail cliente))
 
+formAlteraSenha :: Form (Text, Text)
+formAlteraSenha = renderBootstrap3 BootstrapBasicForm $ (,) <$>
+                    areq textField (bfs ("Senha atual" :: Text)) Nothing <*>
+                    areq textField (bfs ("Nova senha" :: Text)) Nothing
 
 formCadastroProduto :: Form Produto
 formCadastroProduto = renderBootstrap3 BootstrapBasicForm $ Produto <$>
@@ -126,11 +130,13 @@ postLoginR = do
                             setSession "_ID" (pack $ show $ fromSqlKey clienteId) 
                             setSession "_EMAIL" (clienteEmail cliente)
                             setSession "_SENHA" (clienteSenha cliente) 
-                            >> redirect CadastroClienteR
+                            >> redirect PerfilR
 
 getLogOffR :: Handler Html
 getLogOffR = do
     deleteSession "_ID"
+    deleteSession "_EMAIL"
+    deleteSession "_SENHA"
     redirect LoginR
 
 getAdminR :: Handler Html
@@ -202,10 +208,22 @@ paginaPerfil (Just email) (Just senha) = do
     clienteEntity <- runDB $ selectFirst [ClienteEmail ==. email, ClienteSenha ==. senha] []
     case clienteEntity of
         Nothing -> redirect ErroR
-        Just (Entity clienteId cliente) -> widgetDefaultLayout $ do
+        Just (Entity clienteId cliente) -> do
+            (widgetDados, enctypeDados) <- generateFormPost (formAlteraCliente cliente)
+            (widgetSenha, enctypeSenha) <- generateFormPost formAlteraSenha
+            widgetDefaultLayout $ do
             toWidget $ $(juliusFile "templates/perfil.julius")
             $(whamletFile "templates/perfil.hamlet")
     
-    
-        
-        
+postPerfilAlteraDadosR :: ClienteId -> Handler Html
+postPerfilAlteraDadosR clienteId = do
+    ((result, _), _) <- runFormPost (formAlteraCliente (Cliente "" "" "" "" "" "" ""))
+    case result of 
+        FormSuccess (razaoSocial, nomeFantasia, telefone, email) -> do
+            runDB $ update clienteId [ClienteRazaoSocial =. razaoSocial, 
+                                      ClienteNomeFantasia =. nomeFantasia,
+                                      ClienteTelefone =. telefone,
+                                      ClienteEmail =. email]
+            setSession "_EMAIL" email
+            redirect PerfilR
+        _ -> redirect ErroR
