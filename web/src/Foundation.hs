@@ -13,7 +13,7 @@ import Database.Persist.Postgresql
     ( ConnectionPool, SqlBackend, runSqlPool, runMigration )
     
 
-data WebSite = WebSite { getStatic :: Static, connPool :: ConnectionPool } 
+data WebSite = WebSite{getStatic :: Static, connPool :: ConnectionPool } 
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Produto json

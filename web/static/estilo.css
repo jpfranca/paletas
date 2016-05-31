@@ -1,0 +1,17 @@
+.modal-header-danger {
+    background-color: #d9534f;
+    background-image: linear-gradient(to bottom,#d9534f 0,#c12e2a 100%);
+ }
+ 
+.modal-header-danger .modal-title {
+    color: #FFF !important;
+}
+
+.modal-header-success {
+    background-color: #419641;;
+    background-image: linear-gradient(to bottom,#5cb85c 0,#419641 100%);
+ }
+ 
+.modal-header-success .modal-title {
+    color: #FFF !important;
+}

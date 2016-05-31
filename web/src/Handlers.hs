@@ -6,6 +6,7 @@ module Handlers where
 import Import
 import Foundation
 import Yesod
+import Yesod.Static
 import Yesod.Form.Bootstrap3
 import Control.Applicative
 import Data.Text
@@ -16,7 +17,7 @@ import Control.Monad.Logger (runStdoutLoggingT)
 
 mkYesodDispatch "WebSite" pRoutes
 
-data ExternalLibraryName = Bootstrap | BootstrapTheme | BootstrapJs | JQuery | JQueryMask
+data ExternalLibraryName = Bootstrap | BootstrapTheme | BootstrapJs | JQuery | JQueryMask | JQueryBlockUI
 
 loadExternalLibrary :: ExternalLibraryName -> Text
 loadExternalLibrary Bootstrap = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -24,6 +25,7 @@ loadExternalLibrary BootstrapTheme = "https://maxcdn.bootstrapcdn.com/bootstrap/
 loadExternalLibrary BootstrapJs = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
 loadExternalLibrary JQuery = "https://code.jquery.com/jquery-1.12.4.min.js"
 loadExternalLibrary JQueryMask = "https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"
+loadExternalLibrary JQueryBlockUI = "https://malsup.github.io/jquery.blockUI.js"
 
 getNavBar :: Maybe Text -> Widget
 getNavBar (Just "admin") = $(whamletFile "templates/navbarAdmin.hamlet")
@@ -40,6 +42,7 @@ widgetDefaultLayout widget = defaultLayout $ do
     |]
     addStylesheetRemote $ loadExternalLibrary Bootstrap
     addStylesheetRemote $ loadExternalLibrary BootstrapTheme
+    addStylesheet $ StaticR estilo_css
     toWidgetHead [lucius|
         table thead tr td {
             font-weight: bold;
@@ -52,6 +55,8 @@ widgetDefaultLayout widget = defaultLayout $ do
     addScriptRemote $ loadExternalLibrary JQuery
     addScriptRemote $ loadExternalLibrary BootstrapJs
     addScriptRemote $ loadExternalLibrary JQueryMask
+    addScriptRemote $ loadExternalLibrary JQueryBlockUI
+    addScript $ StaticR funcoes_js
     getNavBar sessionUserId
     toWidget [whamlet|
         <div .container> 

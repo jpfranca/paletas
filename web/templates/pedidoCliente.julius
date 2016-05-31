@@ -58,6 +58,9 @@ $(document).ready(function() {
     });
     
     $('#btnConfirmar').click(function() {
+    
+       $.blockUI();
+       
        var today = new Date();
        var dd = today.getDate();
        var mm = today.getMonth()+1; //January is 0!
@@ -86,20 +89,31 @@ $(document).ready(function() {
           data: JSON.stringify(pedido),
           success: function (data) {
               
+              var sucesso = true;
+              
               $.each(pedidoProdutoArray, function (index, item) {
                   item.pedidoId = parseInt(data.resp);
                   
                   $.ajax({
+                      async: false,
                       url: '@{PedidoProdutoR}',
                       method: 'POST',
                       data: JSON.stringify(item),
                       success: function (data) {
-                          console.log(data);
-                      }
+                      },
                   });
               });
+              
+              $('input[name=txtQuantidade]').val('0');
+              $('input[name=txtQuantidade]').trigger('change');
+              
+              $.unblockUI();
+              $('#modalPedido').modal('hide');
+              $('#modalSucesso').modal('show');
           }
        });
+       
+       
     });
     
     $('input[name=txtQuantidade]').change(function (argument) {
@@ -146,19 +160,4 @@ var CalcularTotaisNota = function () {
     $('span[name=lblDias]').html(prazoEncomenda);
     $('#hdnPrazo').val(prazoEncomenda);
     $('#hdnValorTotal').val(FormatDecimal(valortotal, 2));
-}
-
-function FormatDecimal(value, decimals) {
-    var number = Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-    var qtdCasas = number.toString().split('.')[1];
-    
-    if (qtdCasas == null || qtdCasas == undefined || qtdCasas.length == 0) {
-        return number + '.00'
-    }
-    
-    if (qtdCasas.length == 1) {
-        return number + '0'
-    }
-    
-    return number;
 }
