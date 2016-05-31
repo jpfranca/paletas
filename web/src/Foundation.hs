@@ -42,7 +42,6 @@ PedidoProduto json
     pedidoId PedidoId
     produtoId ProdutoId
     quantidade Int
-    valorTotal Double
     deriving Show
 |]
 

@@ -257,8 +257,8 @@ postPedidoR = do
 postPedidoProdutoR :: Handler ()
 postPedidoProdutoR = do
     pedidoProduto <- requireJsonBody :: Handler PedidoProduto
-    pedidoProdutoId <- runDB $ insert pedidoProduto
-    sendResponse (object [pack "data" .= pack (show $ fromSqlKey pedidoProdutoId)])
+    runDB $ insert pedidoProduto
+    sendResponse (object [pack "data" .= pack "CREATED"])
     
 getPedidoSolicitacaoR :: Handler Html
 getPedidoSolicitacaoR = do

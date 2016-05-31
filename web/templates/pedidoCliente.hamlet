@@ -53,7 +53,9 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;
           <h4 class="modal-title">Encomenda
         <div class="formulario formulario-cadastro modal-body" id="frmCadastro">
-            <input type="hidden" value="#{clienteIdText}">
+            <input type="hidden" id="hdnClienteId" value="#{clienteIdText}">
+            <input type="hidden" id="hdnPrazo" value="0">
+            <input type="hidden" id="hdnValorTotal" value="0">
             <div class="row">
               <div class="col-xs-12">
                 <table class="table table-hover table-striped">

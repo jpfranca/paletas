@@ -27,13 +27,12 @@ $(document).ready(function() {
                var valorProduto = $(this).children('input[name=txtValor]').val();
                var quantidade = $(this).children('td').children('input[name=txtQuantidade]').val();
                
-               
                if (isNaN(quantidade) == false && quantidade > 0) {
                    
                    var jsonItem = {
-                       'produtoId': idProduto,
-                       'quantidade': quantidade,
-                       'valorTotal': quantidade * valorProduto
+                       pedidoId: '',
+                       produtoId: parseInt(idProduto),
+                       quantidade: parseInt(quantidade)
                    };
                    
                    pedidoProdutoArray.push(jsonItem);
@@ -41,12 +40,8 @@ $(document).ready(function() {
                    var htmlItem = '<tr><td>' + nomeProduto + '</td><td>R$ <span data-mask="###0,00" data-mask-reverse="true">'+ valorProduto + '</span></td><td>' + quantidade + '</td><td> R$ <span data-mask="###0,00" data-mask-reverse="true">' + FormatDecimal((valorProduto * quantidade), 2) + '</span></td></tr>';
                    
                    innerHtml = innerHtml + htmlItem;
-                   
-                   totalQuantidae = totalQuantidae + quantidade;
                }
            });
-           
-           console.log(pedidoProdutoArray);
            
            $('table tbody[name=tbdDadosPedido]').html('');
            $('table tbody[name=tbdDadosPedido]').append(innerHtml);
@@ -55,12 +50,56 @@ $(document).ready(function() {
                show: true,
                backdrop: 'static'
            });
-           
        } else {
            $('#modalSemProduto').modal('show');
        }
        
        $('tbody[name=tbdDadosPedido]').html(innerHtml);
+    });
+    
+    $('#btnConfirmar').click(function() {
+       var today = new Date();
+       var dd = today.getDate();
+       var mm = today.getMonth()+1; //January is 0!
+    
+       var yyyy = today.getFullYear();
+       if(dd < 10) {
+           dd = '0' + dd;
+       } 
+       
+       if(mm < 10){
+           mm = '0' + mm;
+       } 
+       
+       var today = dd + '/' + mm + '/' + yyyy;
+       
+       var pedido = {
+          "clienteId": parseInt($('#hdnClienteId').val()),
+          "dataSolicitacao": today,
+          "prazoEstimado": parseInt($('#hdnPrazo').val()),
+          "valorTotal": parseFloat($('#hdnValorTotal').val())
+       };
+       
+       $.ajax({
+          url: '@{PedidoR}',
+          method: 'POST',
+          data: JSON.stringify(pedido),
+          success: function (data) {
+              
+              $.each(pedidoProdutoArray, function (index, item) {
+                  item.pedidoId = parseInt(data.resp);
+                  
+                  $.ajax({
+                      url: '@{PedidoProdutoR}',
+                      method: 'POST',
+                      data: JSON.stringify(item),
+                      success: function (data) {
+                          console.log(data);
+                      }
+                  });
+              });
+          }
+       });
     });
     
     $('input[name=txtQuantidade]').change(function (argument) {
@@ -105,6 +144,8 @@ var CalcularTotaisNota = function () {
     
     $('span[name=lblValorTotal]').html(FormatDecimal(valortotal, 2));
     $('span[name=lblDias]').html(prazoEncomenda);
+    $('#hdnPrazo').val(prazoEncomenda);
+    $('#hdnValorTotal').val(FormatDecimal(valortotal, 2));
 }
 
 function FormatDecimal(value, decimals) {
