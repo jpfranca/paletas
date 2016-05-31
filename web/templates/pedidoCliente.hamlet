@@ -72,7 +72,7 @@
                 <label>Prazo
               <div class="col-xs-9">
                 <span name="lblDias">0
-                <span>dias
+                <span>dia(s)
             
             <div class="row">
               <div class="col-xs-3">
@@ -100,7 +100,7 @@
             <div class="row p-x-2" >
                 <div class="col-xs-12">
                   <span class="pull-right">&nbsp;
-                  <a href="#" class="btn btn-success pull-right">Continuar
+                  <a href="@{HistoricoPedidoR}" class="btn btn-success pull-right">Continuar
                   
                   
   <div id="modalSemProduto" class="modal fade" tabindex="-1" role="dialog">

@@ -27,7 +27,7 @@ Cliente json
     cnpj Text
     inscricaoEstadual Text
     telefone Text
-    email Text
+    email Text Unique
     senha Text
     deriving Show
 

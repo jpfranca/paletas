@@ -15,7 +15,7 @@
             <li>
                 <a href="@{PedidoSolicitacaoR}">Novo
             <li>
-                <a href="#">Histórico
+                <a href="@{HistoricoPedidoR}">Histórico
         <li>
             <a href="@{PerfilR}">
                 <span class="glyphicon glyphicon-user">&nbsp;Perfil

@@ -1,0 +1,60 @@
+  <h3>Pedidos
+  <div class="formulario formulario-cadastro">
+      <div class="row">
+          
+      <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
+          <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <td style="width:30%; text-align:center;">Data da solicitação
+                <td style="width:30%; text-align:center;">Prazo de retirada
+                <td style="width:30%; text-align:center;">Valor total
+                <td style="width:10%; text-align:center;">Detalhar
+            <tbody>
+              $forall Entity pedidoId pedido <- pedidos
+                  <tr>
+                    <td style="text-align:center;">#{pedidoDataSolicitacao pedido}
+                    <td style="text-align:center;">#{pedidoPrazoEstimado pedido} dia(s)
+                    <td style="text-align:center;">#{pedidoValorTotal pedido}
+                    <td style="text-align:center;"><a href="#" class="lnkDetalhe" data-key=""><span class="glyphicon glyphicon-search">
+            $if Prelude.null pedidos
+                <tfoot>
+                    <tr>
+                        <td colspan="3" style="text-align:center">Não há pedidos cadastrados
+                        
+  <div id="modalPedido" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;
+          <h4 class="modal-title">Encomenda
+        <div class="formulario formulario-cadastro modal-body" id="frmCadastro">
+            <div class="row">
+              <div class="col-xs-12">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <td style="width:55%;">Produto
+                            <td style="width:15%;">Valor Unitário
+                            <td style="width:15%; text-align:center;">Quantidade
+                            <td style="width:15%; text-align:center;">Valor Total
+                    <tbody name="tbdDadosPedido">
+                      
+            <div class="row">
+              <div class="col-xs-3">
+                <label>Data da solicitação
+              <div class="col-xs-9">
+                <span name="lblDataSolicitacao">
+            
+            <div class="row">
+              <div class="col-xs-3">
+                <label>Prazo
+              <div class="col-xs-9">
+                <span name="lblDias">
+            
+            <div class="row">
+              <div class="col-xs-3">
+                <label>Valor total
+              <div class="col-xs-9">
+                <span name="lblValorTotal">

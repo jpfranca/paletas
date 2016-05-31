@@ -205,6 +205,8 @@ getPerfilPage (Just _) = do
 
 paginaPerfil :: Maybe Text -> Maybe Text -> Handler Html
 paginaPerfil (Nothing) (Nothing) = redirect ErroR
+paginaPerfil (Nothing) (_) = redirect ErroR
+paginaPerfil (_) (Nothing) = redirect ErroR
 paginaPerfil (Just email) (Just senha) = do
     clienteEntity <- runDB $ selectFirst [ClienteEmail ==. email, ClienteSenha ==. senha] []
     case clienteEntity of
@@ -275,6 +277,26 @@ getPedidoSolicitacaoR = do
             widgetDefaultLayout $ do
             toWidget $ $(juliusFile "templates/pedidoCliente.julius")
             $(whamletFile "templates/pedidoCliente.hamlet")
+            
+getHistoricoPedidoR :: Handler Html
+getHistoricoPedidoR = do
+    maybeEmail <- lookupSession "_EMAIL"
+    maybeSenha <- lookupSession "_SENHA"
+    getHistoricoPedidoPage maybeEmail maybeSenha
+
+getHistoricoPedidoPage :: Maybe Text -> Maybe Text -> Handler Html
+getHistoricoPedidoPage Nothing Nothing = redirect ErroR
+getHistoricoPedidoPage Nothing _ = redirect ErroR
+getHistoricoPedidoPage _ Nothing = redirect ErroR
+getHistoricoPedidoPage (Just email) (Just senha) = do
+    clienteEntity <- runDB $ selectFirst [ClienteEmail ==. email, ClienteSenha ==. senha] []
+    case clienteEntity of
+        Nothing -> redirect ErroR
+        Just (Entity clienteId cliente) -> do
+            pedidos <- runDB $ selectList [PedidoClienteId ==. clienteId] [Asc PedidoDataSolicitacao]
+            widgetDefaultLayout $ do
+            toWidget $ $(juliusFile "templates/historicopedido.julius")
+            $(whamletFile "templates/historicopedido.hamlet")
             
 
 getListaPedidoR :: Handler ()
