@@ -231,12 +231,22 @@ postPerfilAlteraSenha clienteId = do
         FormSuccess (senhaAtual, novaSenha) -> do
             clienteEntity <- runDB $ selectFirst [ClienteId ==. clienteId, ClienteSenha ==. senhaAtual] []
             case clienteEntity of
-                Nothing -> redirect ErroR
+                Nothing -> do
+                    widgetDefaultLayout [whamlet|
+                        <h3 .text-danger> Ocorreu um erro ao realizar sua solicitação
+                        
+                        <p>A senha informada esta incorreta <br > <a href=@{PerfilR}>Voltar a pagina de perfil
+                    |]
                 Just (Entity cliId cliente) -> do
                     runDB $ update cliId [ClienteSenha =. novaSenha]
                     setSession "_SENHA" novaSenha
                     redirect PerfilR
-        _ -> redirect ErroR
+        _ -> do 
+            widgetDefaultLayout [whamlet|
+                <h3 .text-danger> Ocorreu um erro ao realizar a alteração de senha
+                
+                <a href=@{PerfilR}>Voltar a pagina de perfil
+            |]
     
 postPedidoR :: Handler ()
 postPedidoR = do

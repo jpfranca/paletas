@@ -1,32 +1,11 @@
-/*$(document).ready(function() {
-   
-   var serviceUrl = '@{PerfilAlteraDadosR clienteId}';
-   console.log(serviceUrl);
-   
-   $('#btnAlterarDados').click(function (argument) {
-       var txtRazaoSocial = $($('#frmAlterarDados input')[1]).val();
-       var txtNomeFantasia = $($('#frmAlterarDados input')[2]).val();
-       var txtTelefone = $($('#frmAlterarDados input')[3]).val();
-       var txtEmail = $($('#frmAlterarDados input')[4).val();
-       
-       $.ajax({
-           url: serviceUrl,
-           method: 'post',
-           dataType: 'json',
-           data: {
-               razaoSocial: txtRazaoSocial,
-               nomeFantasia: txtNomeFantasia,
-               telefone: txtTelefone
-               email: txtEmail
-           },
-           success: function (data) {
-               
-           },
-           error: function (data) {
-               
-           }
-       });
-       
-   }) 
+$(document).ready(function() {
+    var txtTel = $('#frmAlterarDados input[type=text]')[2];
     
-});*/
+    $(txtTel).mask('00 0000-0000');
+    $(txtTel).attr('pattern', '.{12,12}');
+   
+   $('#frmAlterarSenha input[type=password]').each(function (){
+      $(this).attr('pattern', '.{4,12}'); 
+   });
+    
+});

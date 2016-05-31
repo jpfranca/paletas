@@ -97,7 +97,7 @@ var CalcularTotaisNota = function () {
     
     // calcula prazo entrega
     
-    var prazoEncomenda = Math.round(qtdTotal / 100);
+    var prazoEncomenda = Math.floor(qtdTotal / 100);
     
     if ((parseInt(qtdTotal) % 100) > 0) {
         prazoEncomenda = prazoEncomenda + 1; 
