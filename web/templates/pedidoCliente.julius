@@ -157,7 +157,7 @@ var CalcularTotaisNota = function () {
     }
     
     $('span[name=lblValorTotal]').html(FormatDecimal(valortotal, 2));
-    $('span[name=lblDias]').html(prazoEncomenda + ' dia(s)');
+    $('span[name=lblDias]').html(prazoEncomenda);
     $('#hdnPrazo').val(prazoEncomenda);
-    $('#hdnValorTotal').val(FormatDecimal(valortotal, 2));
+    $('#hdnValorTotal').val(valortotal);
 }

@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes,
-             TemplateHaskell #-}
+             TemplateHaskell, DeriveGeneric #-}
  
 module Handlers where
 
@@ -9,10 +9,12 @@ import Yesod
 import Yesod.Static
 import Yesod.Form.Bootstrap3
 import Control.Applicative
+import Control.Monad
 import Data.Text
 import Database.Persist.Postgresql
 import Text.Lucius
 import Text.Julius
+
 import Control.Monad.Logger (runStdoutLoggingT)
 
 mkYesodDispatch "WebSite" pRoutes
@@ -297,7 +299,6 @@ getHistoricoPedidoPage (Just email) (Just senha) = do
             widgetDefaultLayout $ do
             toWidget $ $(juliusFile "templates/historicopedido.julius")
             $(whamletFile "templates/historicopedido.hamlet")
-            
 
 getListaPedidoR :: Handler ()
 getListaPedidoR = do
@@ -307,6 +308,11 @@ getListaPedidoR = do
         
 getListaPedidoIdR :: ClienteId -> Handler ()
 getListaPedidoIdR clienteId = do
-    --addHeader "Access-Control-Allow-Origin" "*"
     pedidoHandler <- runDB $ (rawSql (pack $ "SELECT ??, ??, ?? FROM pedido INNER JOIN cliente ON pedido.clienteid = cliente.id INNER JOIN pedidoproduto ON pedido.id = pedidoproduto.pedidoid WHERE pedido.clienteid = " ++ (show $ fromSqlKey clienteId)) []) :: Handler [(Entity Pedido,Entity Cliente,Entity PedidoProduto)]
     sendResponse (object [pack "data" .= fmap (toJSON . (\(p,_,_) -> p)) pedidoHandler])
+    
+getPedidoProdutoIdR :: PedidoId -> Handler ()
+getPedidoProdutoIdR pedidoId = do
+    pedidoProdutoList <- runDB $ (rawSql (pack $ " SELECT ?? , ?? FROM pedidoproduto INNER JOIN produto ON pedidoproduto.produtoid = produto.id WHERE a.pedidoid = " ++ (show $ fromSqlKey pedidoId)) []) :: Handler [(Entity PedidoProduto, Entity Produto)]
+    sendResponse (object [pack "data" .= fmap (toJSON . (\((Entity _ x), (Entity _ y)) -> parseToPedidoProdutoAux x y)) pedidoProdutoList])
+    

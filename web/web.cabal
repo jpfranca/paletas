@@ -38,6 +38,8 @@ executable         web
                  , persistent-postgresql
                  , monad-logger
                  , shakespeare
+                 , time
+                 , aeson
 
     other-modules: Foundation
                  , Import

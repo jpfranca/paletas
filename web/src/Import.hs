@@ -19,6 +19,7 @@ pRoutes = [parseRoutes|
 /perfil/alterasenha/#ClienteId PerfilAlteraSenha POST
 /pedido PedidoR POST
 /pedidoproduto PedidoProdutoR POST -- VERIFICADO PERMISSAO ATE AQUI
+/pedidoproduto/#PedidoId PedidoProdutoIdR GET
 /pedidosolicitacao PedidoSolicitacaoR GET
 /historicopedido HistoricoPedidoR GET
 /listapedido ListaPedidoR GET

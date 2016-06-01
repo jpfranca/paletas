@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings, TypeFamilies, QuasiQuotes,
              TemplateHaskell, GADTs, FlexibleContexts,
              MultiParamTypeClasses, DeriveDataTypeable,
-             GeneralizedNewtypeDeriving, ViewPatterns #-}
+             GeneralizedNewtypeDeriving, ViewPatterns, DeriveGeneric #-}
 
 module Foundation where
 
@@ -9,6 +9,11 @@ import Import
 import Yesod
 import Yesod.Static
 import Data.Text
+import Data.Time
+import Data.Aeson
+import GHC.Generics
+import Control.Applicative
+import Control.Monad
 import Database.Persist.Postgresql
     ( ConnectionPool, SqlBackend, runSqlPool, runMigration )
     
@@ -44,6 +49,14 @@ PedidoProduto json
     quantidade Int
     deriving Show
 |]
+
+data PedidoProdutoAux = PedidoProdutoAux {pedidoProduto :: PedidoProduto, produto :: Produto} deriving (Show, Generic)
+
+instance ToJSON PedidoProdutoAux where
+
+parseToPedidoProdutoAux :: PedidoProduto -> Produto -> PedidoProdutoAux
+parseToPedidoProdutoAux pedidoProduto produto = (PedidoProdutoAux pedidoProduto produto)
+
 
 staticFiles "static"
 

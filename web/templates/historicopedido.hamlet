@@ -16,8 +16,8 @@
                   <tr>
                     <td style="text-align:center;">#{pedidoDataSolicitacao pedido}
                     <td style="text-align:center;">#{pedidoPrazoEstimado pedido} dia(s)
-                    <td style="text-align:center;">#{pedidoValorTotal pedido}
-                    <td style="text-align:center;"><a href="#" class="lnkDetalhe" data-key=""><span class="glyphicon glyphicon-search">
+                    <td style="text-align:center;">R$ <span class="valorMonetario">#{pedidoValorTotal pedido}</span>
+                    <td style="text-align:center;"><a href="#" class="lnkDetalhe" data-key="@{PedidoProdutoIdR pedidoId}"><span class="glyphicon glyphicon-search">
             $if Prelude.null pedidos
                 <tfoot>
                     <tr>

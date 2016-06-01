@@ -22,7 +22,7 @@
                     <input type="hidden" name="txtNome" value="#{produtoNome produto}">
                     <input type="hidden" name="txtValor" value="#{produtoValor produto}">
                     <td>#{produtoNome produto}
-                    <td >R$ <span data-mask="###0,00" data-mask-reverse="true">R$ #{produtoValor produto}
+                    <td >R$ <span class="valorMonetario">#{produtoValor produto}
                     <td style="text-align:center;"><input type="number" name="txtQuantidade" min="0" data-mask="00000" style="max-width:100px;" value="0">
                     <td name="colValorTotal">R$ <span data-mask="########0,00" data-mask-reverse="true">0,00
             $if Prelude.null produtoList
@@ -34,7 +34,7 @@
           <label>Prazo
         <div class="col-xs-8">
           <span name="lblDias">0
-          <span>dias
+          <span>dia(s)
       
       <div class="row">
         <div class="col-xs-2 col-xs-offset-2">
