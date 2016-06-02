@@ -4,6 +4,10 @@ $(document).ready(function() {
     $('.lnkDetalhe').click(function () {
         var urlPedido = $(this).attr('data-key');
         
+        var dataPedido = $(this).parent().parent().children('td[name=data]').html();
+        var prazoPedido = $(this).parent().parent().children('td[name=prazo]').html();
+        var valorTotal = $(this).parent().parent().children('td[name=valorTotal]').html();
+        
         $.ajax({
           async: false,
           url: urlPedido,
@@ -11,6 +15,37 @@ $(document).ready(function() {
           //data: JSON.stringify(item),
           success: function (data) {
               console.log(data);
+               
+              var tableHtml = '';
+              
+              $.each(data, function(i, item) {
+                  
+                  $.each(item, function(index, element) {
+                      var nomeProduto = element.produto.nome;
+                      var preco = parseFloat(element.produto.valor);
+                      var quantidade = parseInt(element.pedidoProduto.quantidade);
+                      
+                      var htmlItem = '<tr>';
+                      
+                      htmlItem = htmlItem + '<td>' + nomeProduto + '</td>'; 
+                      htmlItem = htmlItem + '<td> R$ ' + FormatDecimal(parseFloat(preco), 2) + '</td>';
+                      htmlItem = htmlItem + '<td>' + quantidade + '</td>';
+                      htmlItem = htmlItem + '<td>' + FormatDecimal((parseFloat(preco) * parseInt(quantidade)) , 2) + '</td>';
+                      
+                      htmlItem = htmlItem + '</tr>';
+                      
+                      tableHtml = tableHtml + htmlItem;
+                  })
+              });
+              
+              $('tbody[name=tbdDadosPedido]').html('');
+              $('tbody[name=tbdDadosPedido]').html(tableHtml);
+              
+              $('#lblDataSolicitacao').html(dataPedido);
+              $('#lblDias').html(prazoPedido);
+              $('#lblValorTotal').html(valorTotal);
+              
+              $('#modalPedido').modal('show');
           },
         });
     });

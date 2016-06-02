@@ -53,6 +53,7 @@ PedidoProduto json
 data PedidoProdutoAux = PedidoProdutoAux {pedidoProduto :: PedidoProduto, produto :: Produto} deriving (Show, Generic)
 
 instance ToJSON PedidoProdutoAux where
+ toJSON (PedidoProdutoAux pedidoProduto produto) = object [ "pedidoProduto" .= (toJSON pedidoProduto),  "produto" .= (toJSON produto) ]
 
 parseToPedidoProdutoAux :: PedidoProduto -> Produto -> PedidoProdutoAux
 parseToPedidoProdutoAux pedidoProduto produto = (PedidoProdutoAux pedidoProduto produto)

@@ -300,6 +300,11 @@ getHistoricoPedidoPage (Just email) (Just senha) = do
             toWidget $ $(juliusFile "templates/historicopedido.julius")
             $(whamletFile "templates/historicopedido.hamlet")
 
+getPedidoProdutoIdR :: PedidoId -> Handler ()
+getPedidoProdutoIdR pedidoId = do
+    pedidoProdutoList <- runDB $ (rawSql (pack $ " SELECT ??, ?? FROM pedido_produto INNER JOIN produto ON pedido_produto.produto_id = produto.id WHERE pedido_produto.pedido_id = " ++ (show $ fromSqlKey pedidoId)) []) :: Handler [(Entity PedidoProduto, Entity Produto)]
+    sendResponse (object [pack "data" .= fmap (toJSON . (\((Entity _ x), (Entity _ y)) -> parseToPedidoProdutoAux x y)) pedidoProdutoList])
+    
 getListaPedidoR :: Handler ()
 getListaPedidoR = do
     --addHeader "Access-Control-Allow-Origin" "*"
@@ -310,9 +315,4 @@ getListaPedidoIdR :: ClienteId -> Handler ()
 getListaPedidoIdR clienteId = do
     pedidoHandler <- runDB $ (rawSql (pack $ "SELECT ??, ??, ?? FROM pedido INNER JOIN cliente ON pedido.clienteid = cliente.id INNER JOIN pedidoproduto ON pedido.id = pedidoproduto.pedidoid WHERE pedido.clienteid = " ++ (show $ fromSqlKey clienteId)) []) :: Handler [(Entity Pedido,Entity Cliente,Entity PedidoProduto)]
     sendResponse (object [pack "data" .= fmap (toJSON . (\(p,_,_) -> p)) pedidoHandler])
-    
-getPedidoProdutoIdR :: PedidoId -> Handler ()
-getPedidoProdutoIdR pedidoId = do
-    pedidoProdutoList <- runDB $ (rawSql (pack $ " SELECT ?? , ?? FROM pedidoproduto INNER JOIN produto ON pedidoproduto.produtoid = produto.id WHERE a.pedidoid = " ++ (show $ fromSqlKey pedidoId)) []) :: Handler [(Entity PedidoProduto, Entity Produto)]
-    sendResponse (object [pack "data" .= fmap (toJSON . (\((Entity _ x), (Entity _ y)) -> parseToPedidoProdutoAux x y)) pedidoProdutoList])
     
