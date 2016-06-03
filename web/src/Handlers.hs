@@ -207,9 +207,6 @@ getPerfilPage (Just _) = do
     paginaPerfil maybeEmail maybeSenha
 
 paginaPerfil :: Maybe Text -> Maybe Text -> Handler Html
-paginaPerfil (Nothing) (Nothing) = redirect ErroR
-paginaPerfil (Nothing) (_) = redirect ErroR
-paginaPerfil (_) (Nothing) = redirect ErroR
 paginaPerfil (Just email) (Just senha) = do
     clienteEntity <- runDB $ selectFirst [ClienteEmail ==. email, ClienteSenha ==. senha] []
     case clienteEntity of
@@ -220,6 +217,7 @@ paginaPerfil (Just email) (Just senha) = do
             widgetDefaultLayout $ do
             toWidget $ $(juliusFile "templates/perfil.julius")
             $(whamletFile "templates/perfil.hamlet")
+paginaPerfil _ _ = redirect ErroR
     
 postPerfilAlteraDadosR :: ClienteId -> Handler Html
 postPerfilAlteraDadosR clienteId = do
