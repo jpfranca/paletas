@@ -286,9 +286,6 @@ getHistoricoPedidoR = do
     getHistoricoPedidoPage maybeEmail maybeSenha
 
 getHistoricoPedidoPage :: Maybe Text -> Maybe Text -> Handler Html
-getHistoricoPedidoPage Nothing Nothing = redirect ErroR
-getHistoricoPedidoPage Nothing _ = redirect ErroR
-getHistoricoPedidoPage _ Nothing = redirect ErroR
 getHistoricoPedidoPage (Just email) (Just senha) = do
     clienteEntity <- runDB $ selectFirst [ClienteEmail ==. email, ClienteSenha ==. senha] []
     case clienteEntity of
@@ -298,6 +295,7 @@ getHistoricoPedidoPage (Just email) (Just senha) = do
             widgetDefaultLayout $ do
             toWidget $ $(juliusFile "templates/historicopedido.julius")
             $(whamletFile "templates/historicopedido.hamlet")
+getHistoricoPedidoPage _ _ = redirect ErroR
 
 getPedidoProdutoIdR :: PedidoId -> Handler ()
 getPedidoProdutoIdR pedidoId = do
