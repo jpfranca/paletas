@@ -20,10 +20,12 @@ pRoutes = [parseRoutes|
 /pedido PedidoR POST
 /pedidoproduto PedidoProdutoR POST -- VERIFICADO PERMISSAO ATE AQUI
 /pedidoproduto/#PedidoId PedidoProdutoIdR GET
+/pedidoproduto/texto/#Int64 PedidoProdutoTextR GET
 /pedidosolicitacao PedidoSolicitacaoR GET
 /historicopedido HistoricoPedidoR GET
 /listapedido ListaPedidoR GET
 /listapedido/#ClienteId ListaPedidoIdR GET
+/gerenciapedido GerenciaPedidoR GET
 /erro ErroR GET 
 /static StaticR Static getStatic
 |]

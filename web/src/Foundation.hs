@@ -10,9 +10,11 @@ import Yesod
 import Yesod.Static
 import Data.Text
 import Data.Time
+import Data.Int
 import Data.Aeson
 import GHC.Generics
 import Control.Applicative
+import Database.Persist.Postgresql
 import Control.Monad
 import Database.Persist.Postgresql
     ( ConnectionPool, SqlBackend, runSqlPool, runMigration )
@@ -52,11 +54,19 @@ PedidoProduto json
 
 data PedidoProdutoAux = PedidoProdutoAux {pedidoProduto :: PedidoProduto, produto :: Produto} deriving (Show, Generic)
 
+data PedidoAux = PedidoAux {pedidoId :: PedidoId, pedido :: Pedido, cliente :: Cliente} deriving (Show, Generic)
+
 instance ToJSON PedidoProdutoAux where
  toJSON (PedidoProdutoAux pedidoProduto produto) = object [ "pedidoProduto" .= (toJSON pedidoProduto),  "produto" .= (toJSON produto) ]
+ 
+instance ToJSON PedidoAux where
+ toJSON (PedidoAux pedidoId pedido cliente) = object [ "pedidoId" .= (show $ fromSqlKey pedidoId), "pedido" .= (toJSON pedido),  "cliente" .= (toJSON cliente) ]
 
 parseToPedidoProdutoAux :: PedidoProduto -> Produto -> PedidoProdutoAux
 parseToPedidoProdutoAux pedidoProduto produto = (PedidoProdutoAux pedidoProduto produto)
+
+parseToPedidoAux :: PedidoId -> Pedido -> Cliente -> PedidoAux
+parseToPedidoAux pedidoId pedido cliente = (PedidoAux pedidoId pedido cliente)
 
 
 staticFiles "static"

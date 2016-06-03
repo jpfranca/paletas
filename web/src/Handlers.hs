@@ -11,6 +11,7 @@ import Yesod.Form.Bootstrap3
 import Control.Applicative
 import Control.Monad
 import Data.Text
+import Data.Int
 import Database.Persist.Postgresql
 import Text.Lucius
 import Text.Julius
@@ -157,7 +158,7 @@ postCadastroClienteR :: Handler Html
 postCadastroClienteR = do
            ((result, _), _) <- runFormPost formCadastroCliente
            case result of 
-               FormSuccess usuario -> (runDB $ insert usuario) >>= \usuarioId -> redirect CadastroClienteR
+               FormSuccess usuario -> (runDB $ insert usuario) >>= \usuarioId -> redirect LoginR
                _ -> redirect ErroR
                
 getProdutoR :: Handler Html
@@ -305,14 +306,25 @@ getPedidoProdutoIdR pedidoId = do
     pedidoProdutoList <- runDB $ (rawSql (pack $ " SELECT ??, ?? FROM pedido_produto INNER JOIN produto ON pedido_produto.produto_id = produto.id WHERE pedido_produto.pedido_id = " ++ (show $ fromSqlKey pedidoId)) []) :: Handler [(Entity PedidoProduto, Entity Produto)]
     sendResponse (object [pack "data" .= fmap (toJSON . (\((Entity _ x), (Entity _ y)) -> parseToPedidoProdutoAux x y)) pedidoProdutoList])
     
+getPedidoProdutoTextR :: Int64 -> Handler ()
+getPedidoProdutoTextR pedidoId = do
+    pedidoProdutoList <- runDB $ (rawSql (pack $ " SELECT ??, ?? FROM pedido_produto INNER JOIN produto ON pedido_produto.produto_id = produto.id WHERE pedido_produto.pedido_id = " ++ (show $ pedidoId)) []) :: Handler [(Entity PedidoProduto, Entity Produto)]
+    sendResponse (object [pack "data" .= fmap (toJSON . (\((Entity _ x), (Entity _ y)) -> parseToPedidoProdutoAux x y)) pedidoProdutoList])
+
 getListaPedidoR :: Handler ()
 getListaPedidoR = do
-    --addHeader "Access-Control-Allow-Origin" "*"
-    pedidoHandler <- runDB $ (rawSql (pack $ "SELECT ??, ??, ?? FROM pedido INNER JOIN cliente ON pedido.clienteid = cliente.id INNER JOIN pedidoproduto ON pedido.id = pedidoproduto.pedidoid") []) :: Handler [(Entity Pedido,Entity Cliente,Entity PedidoProduto)]
-    sendResponse (object [pack "data" .= fmap (toJSON . (\(p,_,_) -> p)) pedidoHandler])
+    pedidoHandler <- runDB $ (rawSql (pack $ "SELECT ??, ?? FROM pedido INNER JOIN cliente ON pedido.cliente_id = cliente.id") []) :: Handler [(Entity Pedido,Entity Cliente)]
+    sendResponse (object [pack "data" .= fmap (toJSON . (\( (Entity pedidoId pedido), (Entity _ cliente) ) -> parseToPedidoAux pedidoId pedido cliente)) pedidoHandler])
         
 getListaPedidoIdR :: ClienteId -> Handler ()
 getListaPedidoIdR clienteId = do
-    pedidoHandler <- runDB $ (rawSql (pack $ "SELECT ??, ??, ?? FROM pedido INNER JOIN cliente ON pedido.clienteid = cliente.id INNER JOIN pedidoproduto ON pedido.id = pedidoproduto.pedidoid WHERE pedido.clienteid = " ++ (show $ fromSqlKey clienteId)) []) :: Handler [(Entity Pedido,Entity Cliente,Entity PedidoProduto)]
-    sendResponse (object [pack "data" .= fmap (toJSON . (\(p,_,_) -> p)) pedidoHandler])
+    pedidoHandler <- runDB $ (rawSql (pack $ "SELECT ??, ?? FROM pedido INNER JOIN cliente ON pedido.cliente_id = cliente.id WHERE pedido.cliente_id = " ++ (show $ fromSqlKey clienteId)) []) :: Handler [(Entity Pedido,Entity Cliente)]
+    sendResponse (object [pack "data" .= fmap (toJSON . (\( (Entity pedidoId pedido), (Entity _ cliente) ) -> parseToPedidoAux pedidoId pedido cliente)) pedidoHandler])
+    
+getGerenciaPedidoR :: Handler Html
+getGerenciaPedidoR = do
+    clienteList <- runDB $ selectList [] [Asc ClienteNomeFantasia]
+    widgetDefaultLayout $ do
+    toWidget $ $(juliusFile "templates/gerenciaPedido.julius")
+    $(whamletFile "templates/gerenciaPedido.hamlet")
     
