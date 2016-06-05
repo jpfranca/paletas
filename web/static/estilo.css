@@ -15,3 +15,11 @@
 .modal-header-success .modal-title {
     color: #FFF !important;
 }
+
+table thead tr td {
+    font-weight: bold;
+}
+
+table thead tr th {
+    font-weight: bold;
+}

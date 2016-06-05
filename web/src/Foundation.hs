@@ -13,6 +13,7 @@ import Data.Time
 import Data.Int
 import Data.Aeson
 import GHC.Generics
+import Data.Time.Format
 import Control.Applicative
 import Database.Persist.Postgresql
 import Control.Monad
@@ -26,6 +27,7 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Produto json
     nome Text
     valor Double
+    ativo Bool default=True
     deriving Show
 
 Cliente json
@@ -34,13 +36,14 @@ Cliente json
     cnpj Text
     inscricaoEstadual Text
     telefone Text
-    email Text Unique
+    email Text
     senha Text
+    UniqueEmail email
     deriving Show
 
 Pedido json
     clienteId ClienteId
-    dataSolicitacao Text
+    dataSolicitacao UTCTime default=now()
     prazoEstimado Int
     valorTotal Double
     deriving Show

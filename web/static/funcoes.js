@@ -2,7 +2,9 @@
 //$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 
 $.blockUI.defaults.baseZ = 2000;
-$.blockUI.defaults.message = '<div class="row><div class="col-xs-2"><p>Por favor, aguarde...</div></div>', 
+$.blockUI.defaults.message = '<div class="row><div class="col-xs-2"><p>Por favor, aguarde...</div></div>';
+
+$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 
 $(document).ready(function () {
     TrataValorMonetario();

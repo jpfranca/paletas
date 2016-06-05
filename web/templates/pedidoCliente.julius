@@ -58,27 +58,12 @@ $(document).ready(function() {
     });
     
     $('#btnConfirmar').click(function() {
-    
-       $.blockUI();
        
-       var today = new Date();
-       var dd = today.getDate();
-       var mm = today.getMonth()+1; //January is 0!
-    
-       var yyyy = today.getFullYear();
-       if(dd < 10) {
-           dd = '0' + dd;
-       } 
-       
-       if(mm < 10){
-           mm = '0' + mm;
-       } 
-       
-       var today = dd + '/' + mm + '/' + yyyy;
+       var data = new Date().toISOString();
        
        var pedido = {
           "clienteId": parseInt($('#hdnClienteId').val()),
-          "dataSolicitacao": today,
+          "dataSolicitacao": data,
           "prazoEstimado": parseInt($('#hdnPrazo').val()),
           "valorTotal": parseFloat($('#hdnValorTotal').val())
        };
@@ -112,7 +97,6 @@ $(document).ready(function() {
               $('#modalSucesso').modal('show');
           }
        });
-       
        
     });
     

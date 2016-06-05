@@ -29,8 +29,8 @@ $(document).ready(function() {
                       
                       htmlItem = htmlItem + '<td>' + nomeProduto + '</td>'; 
                       htmlItem = htmlItem + '<td> R$ ' + FormatDecimal(parseFloat(preco), 2) + '</td>';
-                      htmlItem = htmlItem + '<td>' + quantidade + '</td>';
-                      htmlItem = htmlItem + '<td>' + FormatDecimal((parseFloat(preco) * parseInt(quantidade)) , 2) + '</td>';
+                      htmlItem = htmlItem + '<td style="text-align:center;">' + quantidade + '</td>';
+                      htmlItem = htmlItem + '<td style="text-align:center;"> R$ ' + FormatDecimal((parseFloat(preco) * parseInt(quantidade)) , 2) + '</td>';
                       
                       htmlItem = htmlItem + '</tr>';
                       

@@ -8,14 +8,20 @@
           <table class="table table-hover table-striped">
             <thead>
               <tr>
-                <td style="width:60%;">Nome
-                <td style="width:35%;">Valor
+                <td style="width:45%;">Nome
+                <td style="width:25%;">Valor
+                <td style="width:15%; text-align:center;">Ativo
                 <td style="width:15%; text-align:center;">Excluir
             <tbody>
               $forall Entity produtoId produto <- produtos
                   <tr>
                     <td>#{produtoNome produto}
-                    <td><span class="valorMonetario">#{produtoValor produto}</span>
+                    <td>R$ <span class="valorMonetario">#{produtoValor produto}</span>
+                    <td style="text-align:center;">
+                        $if (produtoAtivo produto)
+                          <a href="@{ProdutoIdR produtoId}"><span class="glyphicon glyphicon-check"></span></a>
+                        $else
+                          <a href="@{ProdutoIdR produtoId}"><span class="glyphicon glyphicon-unchecked"></span></a>
                     <td style="text-align:center;"><a href="#" class="lnkExcluir" data-key="@{ProdutoIdR produtoId}"><span class="glyphicon glyphicon-remove">
             $if Prelude.null produtos
                 <tfoot>

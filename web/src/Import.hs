@@ -11,7 +11,7 @@ pRoutes = [parseRoutes|
 /admin AdminR GET
 /cadastrocliente CadastroClienteR GET POST
 /produto ProdutoR GET POST
-/produto/#ProdutoId ProdutoIdR POST
+/produto/#ProdutoId ProdutoIdR GET POST
 /cliente ClienteR GET
 /cliente/#ClienteId ClienteIdR GET
 /perfil PerfilR GET

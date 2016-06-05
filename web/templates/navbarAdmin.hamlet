@@ -10,7 +10,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
             <a href="@{AdminR}">
-                <span class=" glyphicon glyphicon-cog">&nbsp;Painel&nbsp;de&nbsp;Controle
+                <span class=" glyphicon glyphicon-cog"></span>&nbsp;<span>Paine de Controle</span>
         <li>
             <a href="@{ClienteR}">
                 <span class="glyphicon glyphicon-user">&nbsp;Clientes

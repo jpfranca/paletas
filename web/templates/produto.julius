@@ -1,6 +1,6 @@
 $(document).ready(function() {
      
-    $('#frmCadastro input[type=number]').attr('data-mask', '##0,00');
+    //$('#frmCadastro input[type=number]').mask('##0,00', {reverse: true});
     $('#frmCadastro input[type=number]').attr('pattern', '.{4,6}');
 
     $('.lnkExcluir').click(function () {
@@ -12,4 +12,5 @@ $(document).ready(function() {
        
        $('#modalExcluir').modal('show');
     });
+    
 });

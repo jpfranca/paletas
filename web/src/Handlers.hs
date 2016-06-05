@@ -12,10 +12,10 @@ import Control.Applicative
 import Control.Monad
 import Data.Text
 import Data.Int
+import Data.Time
 import Database.Persist.Postgresql
 import Text.Lucius
 import Text.Julius
-
 import Control.Monad.Logger (runStdoutLoggingT)
 
 mkYesodDispatch "WebSite" pRoutes
@@ -46,15 +46,6 @@ widgetDefaultLayout widget = defaultLayout $ do
     addStylesheetRemote $ loadExternalLibrary Bootstrap
     addStylesheetRemote $ loadExternalLibrary BootstrapTheme
     addStylesheet $ StaticR estilo_css
-    toWidgetHead [lucius|
-        table thead tr td {
-            font-weight: bold;
-        }
-        
-        table thead tr th {
-            font-weight: bold;
-        }
-    |]
     addScriptRemote $ loadExternalLibrary JQuery
     addScriptRemote $ loadExternalLibrary BootstrapJs
     addScriptRemote $ loadExternalLibrary JQueryMask
@@ -93,8 +84,8 @@ formAlteraSenha = renderBootstrap3 BootstrapBasicForm $ (,) <$>
                     areq passwordField (bfs ("Senha atual" :: Text)) Nothing <*>
                     areq passwordField (bfs ("Nova senha" :: Text)) Nothing
 
-formCadastroProduto :: Form Produto
-formCadastroProduto = renderBootstrap3 BootstrapBasicForm $ Produto <$>
+formCadastroProduto :: Form (Text, Double)
+formCadastroProduto = renderBootstrap3 BootstrapBasicForm $ (,) <$>
                         areq textField (bfs ("Nome" :: Text)) Nothing <*>
                         areq doubleField (bfs ("Valor" :: Text)) Nothing
 
@@ -134,7 +125,7 @@ postLoginR = do
                             setSession "_ID" (pack $ show $ fromSqlKey clienteId) 
                             setSession "_EMAIL" (clienteEmail cliente)
                             setSession "_SENHA" (clienteSenha cliente) 
-                            >> redirect PerfilR
+                            redirect PerfilR
 
 getLogOffR :: Handler Html
 getLogOffR = do
@@ -158,7 +149,12 @@ postCadastroClienteR :: Handler Html
 postCadastroClienteR = do
            ((result, _), _) <- runFormPost formCadastroCliente
            case result of 
-               FormSuccess usuario -> (runDB $ insert usuario) >>= \usuarioId -> redirect LoginR
+               FormSuccess cliente -> do
+                   clienteId <- runDB $ insert cliente
+                   setSession "_ID" (pack $ show $ fromSqlKey clienteId) 
+                   setSession "_EMAIL" (clienteEmail cliente)
+                   setSession "_SENHA" (clienteSenha cliente) 
+                   redirect PerfilR
                _ -> redirect ErroR
                
 getProdutoR :: Handler Html
@@ -173,8 +169,16 @@ postProdutoR :: Handler Html
 postProdutoR = do
     ((result, _), _) <- runFormPost formCadastroProduto
     case result of 
-        FormSuccess produto -> (runDB $ insert produto) >> redirect ProdutoR
+        FormSuccess (nome, valor) -> (runDB $ insert (Produto nome valor True)) >> redirect ProdutoR
         _ -> redirect ErroR
+
+getProdutoIdR :: ProdutoId -> Handler Html
+getProdutoIdR produtoId = do
+    produto <- runDB $ get404 produtoId
+    case (produtoAtivo produto) of
+        True -> runDB $ update produtoId [ProdutoAtivo =. False]
+        False -> runDB $ update produtoId [ProdutoAtivo =. True]
+    redirect ProdutoR
         
 postProdutoIdR :: ProdutoId -> Handler Html
 postProdutoIdR produtoId = do
@@ -274,7 +278,7 @@ getPedidoSolicitacaoR = do
     case sessionUserId of
         Nothing -> redirect ErroR
         (Just clienteIdText) -> do
-            produtoList <- runDB $ selectList [] [Asc ProdutoNome]
+            produtoList <- runDB $ selectList [ProdutoAtivo ==. True] [Asc ProdutoNome]
             widgetDefaultLayout $ do
             toWidget $ $(juliusFile "templates/pedidoCliente.julius")
             $(whamletFile "templates/pedidoCliente.hamlet")
