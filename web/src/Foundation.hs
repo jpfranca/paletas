@@ -85,19 +85,26 @@ instance YesodPersist WebSite where
 
 instance Yesod WebSite where
     authRoute _ = Just LoginR -- rota default para acesso não autorizado
+    isAuthorized LoginR _ = onlyLoggoff
     isAuthorized LogOffR _ = isLogged
-    isAuthorized CadastroClienteR _ = onlyLoggoff
     isAuthorized AdminR _ = onlyAdmin
+    isAuthorized CadastroClienteR _ = onlyLoggoff
     isAuthorized ProdutoR _ = onlyAdmin
     isAuthorized (ProdutoIdR _) _ = onlyAdmin
     isAuthorized ClienteR _ = onlyAdmin
     isAuthorized (ClienteIdR _) _ = onlyAdmin
     isAuthorized PerfilR _ = onlyClienteUser
     isAuthorized (PerfilAlteraDadosR _) _ = onlyClienteUser
-    isAuthorized (PerfilAlteraSenha _) _ = onlyClienteUser
+    isAuthorized (PerfilAlteraSenhaR _) _ = onlyClienteUser
     isAuthorized PedidoR _ = onlyClienteUser
     isAuthorized PedidoProdutoR _ = onlyClienteUser
+    isAuthorized (PedidoProdutoIdR _) _ = onlyClienteUser
+    isAuthorized (PedidoProdutoTextR _) _ = onlyAdmin
     isAuthorized PedidoSolicitacaoR _ = onlyClienteUser
+    isAuthorized HistoricoPedidoR _ = onlyClienteUser
+    isAuthorized ListaPedidoR _ = onlyAdmin
+    isAuthorized (ListaPedidoIdR _) _ = onlyAdmin
+    isAuthorized GerenciaPedidoR _ = onlyAdmin
     isAuthorized _ _ = return Authorized
 
 isLogged = do

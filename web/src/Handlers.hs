@@ -236,8 +236,8 @@ postPerfilAlteraDadosR clienteId = do
             redirect PerfilR
         _ -> redirect ErroR
         
-postPerfilAlteraSenha :: ClienteId -> Handler Html
-postPerfilAlteraSenha clienteId = do
+postPerfilAlteraSenhaR :: ClienteId -> Handler Html
+postPerfilAlteraSenhaR clienteId = do
     ((result, _), _) <- runFormPost formAlteraSenha
     case result of
         FormSuccess (senhaAtual, novaSenha) -> do
