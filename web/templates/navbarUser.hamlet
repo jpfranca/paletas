@@ -5,7 +5,7 @@
         <span class="icon-bar">
         <span class="icon-bar">
         <span class="icon-bar">
-      <a class="navbar-brand" href="#">Paletas Haskell
+      <a class="navbar-brand" href="@{HomeR}">Paletas Haskell
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">

@@ -90,7 +90,8 @@ formCadastroProduto = renderBootstrap3 BootstrapBasicForm $ (,) <$>
                         areq doubleField (bfs ("Valor" :: Text)) Nothing
 
 getHomeR :: Handler Html
-getHomeR = widgetDefaultLayout [whamlet|Hello World!|]
+getHomeR = do 
+    widgetDefaultLayout $(whamletFile "templates/home.hamlet")
 
 getErroR :: Handler Html
 getErroR = widgetDefaultLayout $ do
@@ -327,4 +328,5 @@ getGerenciaPedidoR = do
     widgetDefaultLayout $ do
     toWidget $ $(juliusFile "templates/gerenciaPedido.julius")
     $(whamletFile "templates/gerenciaPedido.hamlet")
+    
     

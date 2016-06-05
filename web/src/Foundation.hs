@@ -71,7 +71,6 @@ parseToPedidoProdutoAux pedidoProduto produto = (PedidoProdutoAux pedidoProduto 
 parseToPedidoAux :: PedidoId -> Pedido -> Cliente -> PedidoAux
 parseToPedidoAux pedidoId pedido cliente = (PedidoAux pedidoId pedido cliente)
 
-
 staticFiles "static"
 
 mkYesodData "WebSite" pRoutes
