@@ -5,14 +5,13 @@
       <div class="row">
         <div class="col-sm-4">
           <div class="well">
-            <p>Clientes
+            <p><a href="@{ClienteR}">Cliente</a>
           
         <div class="col-sm-4"> 
           <div class="well">
-            <p>Produtos
+            <p><a href="@{ProdutoR}">Produto</a>
           
         <div class="col-sm-4">
           <div class="well">
-           <p>Clientes
-           
+           <p><a href="@{GerenciaPedidoR}">Pedido</a>
     
