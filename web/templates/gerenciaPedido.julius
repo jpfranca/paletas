@@ -35,7 +35,7 @@ $(document).ready(function() {
                       var htmlItem = '<tr>';
                       
                       htmlItem = htmlItem + '<td style="text-align:center;" name="cliente">' + nomeFantasiaCliente + '</td>'; 
-                      htmlItem = htmlItem + '<td style="text-align:center;" name="data">' + dataPedido + '</td>'; 
+                      htmlItem = htmlItem + '<td style="text-align:center;" name="data">' + dataPedido.substr(0, 10) + '</td>'; 
                       htmlItem = htmlItem + '<td style="text-align:center;" name="prazo">' + prazoEstimado + '</td>'; 
                       htmlItem = htmlItem + '<td style="text-align:center;" name="valorTotal"> R$ ' + FormatDecimal(parseFloat(valorTotal), 2) + '</td>';
                       htmlItem = htmlItem + '<td style="text-align:center;"><a href="#" class="lnkDetalhe" data-key="' + url.replace('0', pedidoId) + '"><span class="glyphicon glyphicon-search"></span></a></td>';
